@@ -1,0 +1,11 @@
+.streamlit/secrets.toml
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+.env
+~$*
+docs/*.docx
+Novo(a)*.docx
+*.log
