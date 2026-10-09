@@ -33,6 +33,9 @@ Copie `.streamlit/secrets.toml.example` para `.streamlit/secrets.toml` e preench
 
 Se as duas existirem, o Gemini é usado. Sem nenhuma chave, o chat mostra um aviso e a aba Simulador continua funcionando.
 
+## Publicar na internet (para outras pessoas usarem pelo link)
+O jeito mais simples e gratuito é o Streamlit Community Cloud (share.streamlit.io): entre com a conta do GitHub, escolha este repositório, o arquivo `app.py` e, em *Advanced settings > Secrets*, cole `GEMINI_API_KEY = "sua-chave"`. O app ganha um link público que funciona em qualquer navegador, sem instalar nada.
+
 ## Testes
 ```bash
 pytest
