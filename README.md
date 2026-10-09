@@ -27,7 +27,7 @@ streamlit run app.py
 ### Chave de API (só para o chat)
 Copie `.streamlit/secrets.toml.example` para `.streamlit/secrets.toml` e preencha **uma** chave (ou use variáveis de ambiente):
 
-- `GEMINI_API_KEY`: Google Gemini, tem camada gratuita (chave em https://aistudio.google.com/apikey). Modelo padrão: `gemini-3.8-flash`.
+- `GEMINI_API_KEY`: Google Gemini, tem camada gratuita (chave em https://aistudio.google.com/apikey). Modelo padrão: `gemini-3.5-flash-lite` (rápido), com `gemini-3.6-flash` e `gemini-3.7-flash` como reserva se houver erro de sobrecarga.
 - `ANTHROPIC_API_KEY`: Claude. Modelo padrão: `claude-haiku-5-5`.
 - `MODELO` (opcional): troca o modelo do provedor em uso.
 

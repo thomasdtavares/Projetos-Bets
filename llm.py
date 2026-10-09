@@ -2,7 +2,9 @@
 import os
 
 # Modelos padrão (conferidos na documentação em out/2026). Podem ser trocados por variável/secret.
-MODELO_GEMINI = "gemini-3.8-flash"  # Flash estável com camada gratuita
+# Gemini com camada gratuita. O primeiro é o mais rápido; os outros entram se ele estiver sobrecarregado (erro 503).
+MODELOS_GEMINI = ["gemini-3.5-flash-lite", "gemini-3.6-flash", "gemini-3.7-flash"]
+TEMPO_LIMITE_MS = 20_000  # por tentativa
 MODELO_CLAUDE = "claude-haiku-5-5"  # Haiku mais recente
 MAX_TOKENS = 1500
 
@@ -46,17 +48,23 @@ def _gemini(mensagens, prompt_sistema):
     from google import genai
     from google.genai import types
 
-    client = genai.Client(api_key=_ler("GEMINI_API_KEY"))
+    client = genai.Client(api_key=_ler("GEMINI_API_KEY"), http_options=types.HttpOptions(timeout=TEMPO_LIMITE_MS))
     conteudo = [
         types.Content(role="user" if m["role"] == "user" else "model", parts=[types.Part(text=m["content"])])
         for m in mensagens
     ]
-    resp = client.models.generate_content(
-        model=_ler("MODELO") or MODELO_GEMINI,
-        contents=conteudo,
-        config=types.GenerateContentConfig(system_instruction=prompt_sistema, max_output_tokens=MAX_TOKENS),
-    )
-    return resp.text or ""
+    config = types.GenerateContentConfig(system_instruction=prompt_sistema, max_output_tokens=MAX_TOKENS)
+    modelos = [_ler("MODELO")] if _ler("MODELO") else MODELOS_GEMINI
+    erro = None
+    for modelo in modelos:  # tenta o próximo se este estiver sobrecarregado, lento ou vazio
+        try:
+            texto = client.models.generate_content(model=modelo, contents=conteudo, config=config).text
+            if texto:
+                return texto
+            erro = ValueError("resposta vazia")
+        except Exception as e:
+            erro = e
+    raise erro
 
 
 def _claude(mensagens, prompt_sistema):

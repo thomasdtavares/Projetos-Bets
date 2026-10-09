@@ -1,6 +1,6 @@
 # Roteiro de teste do chat (ponta a ponta)
 
-**Status:** não executado com modelo real nesta entrega, porque não havia chave de API (`GEMINI_API_KEY` ou `ANTHROPIC_API_KEY`) configurada no ambiente de desenvolvimento. O resto do fluxo (extração da linha `[SIMULAR]`, resumo, botão "Abrir no simulador", aviso sem chave) foi verificado com uma resposta simulada. Para rodar: configure uma chave em `.streamlit/secrets.toml`, execute `streamlit run app.py` e siga a tabela abaixo, anotando o resultado na última coluna.
+**Status:** executado em 09/10/2026 com o Gemini (`gemini-3.5-flash-lite`): as 10 perguntas e os 3 casos especiais responderam em 2 a 4 segundos. O escopo, a prioridade de risco (P9, sem simulação) e a linha `[SIMULAR valor=20 odd=2.20 prob=0.40 apostas=38]` saíram como esperado. As respostas completas estão em `tests/saida_teste_chat.md`; a conferência de cada resposta com a ficha correspondente ainda deve ser feita pelo grupo. Para repetir: configure uma chave em `.streamlit/secrets.toml`, execute `streamlit run app.py` e siga a tabela abaixo, anotando o resultado na última coluna.
 
 ## A. As 10 perguntas da base
 Esperado: resposta fiel à ficha correspondente (mesmos números e conceitos), em segunda pessoa, sem palpite, sem juízo moral. Nas fichas P4 a P8, o assistente pode oferecer o simulador.
