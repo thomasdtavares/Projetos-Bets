@@ -10,6 +10,7 @@ Convenções:
   e a linha [SIMULAR ...] usam percentual (taxa=0.8).
 - Hipóteses: apostas independentes, odd e p constantes, sem bônus nem impostos.
 """
+import math
 import re
 
 import numpy as np
@@ -336,3 +337,193 @@ def extrair_simular(texto):
         params[chave] = v
     return limpo, params or None
 
+
+
+# ============================================================================
+# Simulador para leigos (15/10/2026): cenário em linguagem do dia a dia,
+# conta exata (binomial), "quanto mais tempo, mais gente perde", estratégias,
+# jogo rodada a rodada e bilhete múltiplo.
+# ============================================================================
+
+# Tipos de aposta oferecidos na tela (odds ilustrativas, sem relação com jogos reais)
+TIPOS_ODD = {"Favorito": 1.50, "Jogo equilibrado": 2.20, "Zebra": 5.00}
+# Horizontes de tempo, em semanas
+HORIZONTES = {"1 mês": 4, "3 meses": 13, "6 meses": 26, "1 Brasileirão": 38,
+              "1 ano": 52, "2 anos": 104, "5 anos": 260}
+APOSTAS_POR_SEMANA = (1, 2, 3, 5, 10)
+TAXA_GUARDAR = 0.8  # % ao mês, só para a comparação "e se guardasse" (exemplo, não recomendação)
+
+
+def cenario_do_chat(apostas):
+    """Converte um número de apostas em (apostas por semana, horizonte) mais próximo."""
+    validar(apostas=apostas)
+    melhor = min(((pw, nome) for pw in APOSTAS_POR_SEMANA for nome in HORIZONTES),
+                 key=lambda c: (abs(c[0] * HORIZONTES[c[1]] - apostas), c[0]))
+    return melhor
+
+
+def distribuicao(valor, odd, prob, n):
+    """Distribuição EXATA do resultado de n apostas iguais (número de acertos ~ Binomial(n, p)).
+
+    Retorna chance de terminar no lucro / no prejuízo / empatado, perda média de quem perdeu,
+    ganho médio de quem ganhou e o resultado médio (valor esperado).
+    """
+    validar(valor=valor, odd=odd, prob=prob, apostas=n)
+    n = int(n)
+    k = np.arange(n + 1)
+    if prob <= 0:
+        pmf = (k == 0).astype(float)
+    elif prob >= 1:
+        pmf = (k == n).astype(float)
+    else:
+        logc = np.array([math.lgamma(n + 1) - math.lgamma(i + 1) - math.lgamma(n - i + 1) for i in k])
+        logp = logc + k * math.log(prob) + (n - k) * math.log1p(-prob)
+        pmf = np.exp(logp - logp.max())
+        pmf /= pmf.sum()
+    resultado = k * valor * (odd - 1) - (n - k) * valor
+    lucro, perda = resultado > 1e-9, resultado < -1e-9
+    p_lucro, p_perda = float(pmf[lucro].sum()), float(pmf[perda].sum())
+    return {
+        "apostas": n,
+        "total_apostado": valor * n,
+        "chance_lucro": p_lucro,
+        "chance_perda": p_perda,
+        "chance_empate": max(0.0, 1 - p_lucro - p_perda),
+        "perda_media": float((resultado[perda] * pmf[perda]).sum() / p_perda) if p_perda > 0 else 0.0,
+        "ganho_medio": float((resultado[lucro] * pmf[lucro]).sum() / p_lucro) if p_lucro > 0 else 0.0,
+        "resultado_medio": float((resultado * pmf).sum()),
+        "acertos_medios": n * prob,
+    }
+
+
+def pessoas_em_100(d):
+    """Arredonda as chances para '100 pessoas' somando exatamente 100."""
+    perderam = int(round(d["chance_perda"] * 100))
+    ganharam = int(round(d["chance_lucro"] * 100))
+    ganharam = min(ganharam, 100 - perderam)
+    return {"perderam": perderam, "ganharam": ganharam, "empataram": 100 - perderam - ganharam}
+
+
+def lucro_ao_longo_do_tempo(valor, odd, prob, por_semana, meses=60):
+    """Mês a mês (1 a 'meses'), a chance EXATA de estar no lucro e o resultado médio.
+
+    A chance oscila um pouco de um mês para outro (o número de acertos é inteiro), por isso
+    também devolvemos a tendência: média móvel de 5 meses.
+    """
+    linhas = []
+    for m in range(1, meses + 1):
+        n = max(1, int(round(por_semana * m * 52 / 12)))
+        if n > MAX_APOSTAS:
+            break
+        d = distribuicao(valor, odd, prob, n)
+        linhas.append({"mes": m, "apostas": n, "chance_lucro": d["chance_lucro"],
+                       "resultado_medio": d["resultado_medio"]})
+    ch = np.array([l["chance_lucro"] for l in linhas])
+    for i, l in enumerate(linhas):
+        l["tendencia"] = float(ch[max(0, i - 2):i + 3].mean())
+    return linhas
+
+
+# ------------------------------------------------------------------ estratégias
+
+ESTRATEGIAS = {
+    "fixo": ("Sempre o mesmo valor", "Aposta sempre o mesmo valor, ganhando ou perdendo."),
+    "martingale": ("Dobrar depois de perder", "Depois de cada derrota, dobra a aposta para recuperar tudo de uma vez."),
+    "deixar_correr": ("Dobrar depois de ganhar", "Quando ganha, dobra a próxima aposta para aproveitar a \"boa fase\"."),
+    "recuperar": ("Apostar alto para recuperar", "Quando está no prejuízo, aposta o necessário para zerar a perda numa vitória só."),
+    "parar_no_lucro": ("Parar quando lucrar", "Aposta sempre o mesmo valor e para assim que alcança um lucro."),
+    "limite_perda": ("Limite de perda", "Aposta sempre o mesmo valor e para quando a perda chega ao limite definido antes."),
+}
+
+
+def comparar_estrategias(valor, odd, prob, apostas, banca, meta=None, limite=None, n_sim=10_000, semente=None):
+    """Simula as estratégias com OS MESMOS sorteios e devolve uma linha por estratégia.
+
+    banca: dinheiro reservado. Ninguém aposta mais do que tem: se a aposta pedida passa do
+    saldo, aposta o que sobrou; com saldo zerado, a pessoa 'perdeu tudo' e para.
+    meta (parar no lucro) e limite (limite de perda) em R$; padrão: metade da banca.
+    """
+    validar(valor=valor, odd=odd, prob=prob, apostas=apostas, banca=banca)
+    if not banca or banca < valor:
+        raise ErroValidacao("O dinheiro reservado precisa ser pelo menos o valor de uma aposta.")
+    meta = banca * 0.5 if meta is None else meta
+    limite = banca * 0.5 if limite is None else limite
+    n = int(apostas)
+    acertos = np.random.default_rng(semente).random((n_sim, n)) < prob
+    linhas = []
+    for chave, (nome, descricao) in ESTRATEGIAS.items():
+        saldo = np.full(n_sim, float(banca))
+        ultima = np.full(n_sim, float(valor))
+        ganhou_ultima = np.zeros(n_sim, dtype=bool)
+        primeira = True
+        parou = np.zeros(n_sim, dtype=bool)
+        apostado = np.zeros(n_sim)
+        for t in range(n):
+            if chave == "martingale":
+                stake = valor if primeira else np.where(ganhou_ultima, valor, ultima * 2)
+            elif chave == "deixar_correr":
+                stake = valor if primeira else np.where(ganhou_ultima, ultima * 2, valor)
+            elif chave == "recuperar":
+                deficit = banca - saldo
+                stake = np.where(deficit > 0, np.maximum(valor, deficit / (odd - 1)), valor)
+            else:
+                stake = valor
+            stake = np.broadcast_to(np.asarray(stake, dtype=float), (n_sim,))
+            if chave == "parar_no_lucro":
+                parou |= saldo - banca >= meta
+            elif chave == "limite_perda":
+                parou |= banca - saldo >= limite
+            ativo = ~parou & (saldo > 0.005)
+            stake = np.where(ativo, np.minimum(stake, saldo), 0.0)
+            ganho = np.where(acertos[:, t], stake * (odd - 1), -stake)
+            saldo = saldo + ganho
+            apostado += stake
+            ultima = np.where(ativo, stake, ultima)
+            ganhou_ultima = np.where(ativo, acertos[:, t], ganhou_ultima)
+            primeira = False
+        resultado = saldo - banca
+        linhas.append({
+            "chave": chave, "nome": nome, "descricao": descricao,
+            "resultado_medio": float(resultado.mean()),
+            "perderam": float((resultado < -0.005).mean()),
+            "ganharam": float((resultado > 0.005).mean()),
+            "perderam_tudo": float((saldo <= 0.005).mean()),
+            "apostado_medio": float(apostado.mean()),
+            "retorno_por_100": float(100 * (1 + resultado.sum() / apostado.sum())) if apostado.sum() > 0 else 100.0,
+        })
+    return linhas
+
+
+# ------------------------------------------------------------- bilhete múltiplo
+
+def bilhete_multiplo(odd, jogos, margem=MARGEM_PADRAO):
+    """Bilhete com 'jogos' palpites de mesma odd: odds se multiplicam, chances também.
+
+    A margem também se multiplica: de cada R$ 100, voltam 100 / (1 + margem)^jogos.
+    """
+    validar(odd=odd)
+    if int(jogos) != jogos or not 1 <= jogos <= 20:
+        raise ErroValidacao("O bilhete deve ter de 1 a 20 jogos.")
+    p = prob_justa(odd, margem)
+    return {
+        "jogos": int(jogos),
+        "odd_total": odd ** jogos,
+        "chance": p ** jogos,
+        "chance_parece": (1 / odd) ** jogos,
+        "retorno_por_100": 100 * (p * odd) ** jogos,
+    }
+
+
+# ------------------------------------------------------------- jogo rodada a rodada
+
+def rodada_do_jogo(rng, odd, prob, valor, saldo, n_outros=1000):
+    """Uma aposta do jogo: o resultado do usuário e o que a casa ganha com n_outros apostadores
+    fazendo a mesma aposta ao mesmo tempo. Retorna (acertou, novo_saldo, ganho_da_casa)."""
+    validar(odd=odd, prob=prob, valor=valor)
+    if saldo < valor:
+        raise ErroValidacao("Seu dinheiro do jogo acabou.")
+    acertou = bool(rng.random() < prob)
+    novo = saldo + (valor * (odd - 1) if acertou else -valor)
+    acertos_outros = int(rng.binomial(n_outros, prob))
+    casa = n_outros * valor - acertos_outros * valor * odd
+    return acertou, novo, float(casa)

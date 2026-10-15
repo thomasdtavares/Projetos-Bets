@@ -187,3 +187,75 @@ def test_extrair_simular_sem_prob_com_margem():
 def test_sem_linha_simular():
     texto = "Resposta normal."
     assert s.extrair_simular(texto) == (texto, None)
+
+
+# --- Simulador para leigos ---------------------------------------------------------
+
+def test_distribuicao_exata_bate_com_valor_esperado_e_monte_carlo():
+    p = s.prob_justa(2.2, 0.05)
+    d = s.distribuicao(20, 2.2, p, 38)
+    assert d["resultado_medio"] == pytest.approx(20 * 38 * (p * 2.2 - 1))
+    assert d["chance_lucro"] + d["chance_perda"] + d["chance_empate"] == pytest.approx(1)
+    mc = s.monte_carlo(20, 2.2, p, 38, n_sim=20_000, semente=3)
+    assert d["chance_perda"] == pytest.approx(mc["prob_abaixo_inicial"], abs=0.02)
+
+
+def test_distribuicao_casos_extremos():
+    assert s.distribuicao(10, 2.0, 0.0, 5)["chance_perda"] == 1
+    d = s.distribuicao(10, 2.0, 1.0, 5)
+    assert d["chance_lucro"] == 1 and d["resultado_medio"] == pytest.approx(50)
+    assert s.distribuicao(10, 2.0, 0.5, 2)["chance_empate"] == pytest.approx(0.5)  # 1 acerto e 1 erro
+
+
+def test_pessoas_em_100_somam_100():
+    d = s.distribuicao(50, 1.8, s.prob_justa(1.8), 52)
+    g = s.pessoas_em_100(d)
+    assert sum(g.values()) == 100 and g["perderam"] > g["ganharam"]
+
+
+def test_quanto_mais_tempo_menos_gente_no_lucro():
+    linhas = s.lucro_ao_longo_do_tempo(20, 2.2, s.prob_justa(2.2), 2)
+    assert len(linhas) == 60 and linhas[-1]["apostas"] == 520
+    tend = [l["tendencia"] for l in linhas]
+    assert tend[-1] < tend[0] * 0.5
+    assert linhas[-1]["resultado_medio"] < linhas[0]["resultado_medio"] < 0
+
+
+def test_cenario_do_chat():
+    assert s.cenario_do_chat(38) == (1, "1 Brasileirão")
+    assert s.cenario_do_chat(52) == (1, "1 ano")
+    assert s.cenario_do_chat(104) == (1, "2 anos")
+
+
+def test_estrategias_nenhuma_vence_a_margem():
+    p = s.prob_justa(2.0)
+    linhas = {l["chave"]: l for l in s.comparar_estrategias(20, 2.0, p, 100, banca=400, n_sim=4000, semente=7)}
+    assert set(linhas) == set(s.ESTRATEGIAS)
+    for l in linhas.values():
+        assert l["resultado_medio"] < 0  # ninguém vence a margem, em média
+        assert l["retorno_por_100"] < 100.5
+    assert linhas["martingale"]["perderam_tudo"] > linhas["fixo"]["perderam_tudo"]
+    assert linhas["recuperar"]["perderam_tudo"] > linhas["fixo"]["perderam_tudo"]
+    # o limite de perda reduz a perda média em relação a apostar sem parar
+    assert linhas["limite_perda"]["resultado_medio"] > linhas["fixo"]["resultado_medio"]
+
+
+def test_estrategias_ninguem_aposta_mais_do_que_tem():
+    linhas = s.comparar_estrategias(50, 2.0, 0.0, 10, banca=120, n_sim=10, semente=1)
+    for l in linhas:
+        assert l["resultado_medio"] >= -120 - 1e-9
+
+
+def test_bilhete_multiplo_margem_se_multiplica():
+    b = s.bilhete_multiplo(1.8, 3, margem=0.05)
+    assert b["odd_total"] == pytest.approx(1.8 ** 3)
+    assert b["chance_parece"] == pytest.approx((1 / 1.8) ** 3)  # ≈17%, como na ficha
+    assert b["retorno_por_100"] == pytest.approx(100 / 1.05 ** 3)
+
+
+def test_rodada_do_jogo():
+    rng = np.random.default_rng(1)
+    acertou, saldo, casa = s.rodada_do_jogo(rng, 2.0, 1.0, 10, 200)
+    assert acertou and saldo == 210 and casa == pytest.approx(-10000)
+    with pytest.raises(s.ErroValidacao):
+        s.rodada_do_jogo(rng, 2.0, 0.5, 10, 5)

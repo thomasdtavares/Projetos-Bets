@@ -6,7 +6,7 @@ Projeto da disciplina Projetos III — **Grupo 3** (Bernardo Nappo, Luc Le Corre
 
 ## Como funciona
 - **Aba Chat**: um modelo de linguagem responde com base na base de conhecimento (`conhecimento/base.md`, as 10 fichas do Conteúdo III) e nas regras de `prompt_sistema.md`. Quando o caso pede simulação, a resposta termina com uma linha `[SIMULAR ...]`; o app a esconde, calcula um resumo em Python e oferece o botão **Abrir no simulador**.
-- **Aba Simulador**: funciona sozinha, sem o chat. Não pede palpite: a chance de acerto sai da própria odd, sem a margem da casa (margem de referência de 5%, ou calculada com as 3 odds do jogo). Aposta única (quanto volta de cada R$ 100, valor esperado, ponto de equilíbrio), Monte Carlo com 10.000 simulações (stake fixa, percentual da banca e martingale, com semente opcional), comparação de padrões e custo de oportunidade, com gráficos em Plotly.
+- **Aba Simulador** (feita para quem não tem formação em estatística, funciona sem o chat): quatro partes. **Quanto custa apostar**: 3 perguntas do dia a dia (quanto, tipo de aposta, quantas por semana, por quanto tempo) e um botão; mostra o resultado médio, o que mudou em relação ao cenário anterior, "100 pessoas fazendo a mesma coisa" e como a chance de estar no lucro cai com o tempo (conta exata, binomial). **Estratégias**: valor fixo, dobrar depois de perder, dobrar depois de ganhar, apostar alto para recuperar, parar no lucro e limite de perda, com os mesmos sorteios (Monte Carlo). **Aposte rodada a rodada**: mini-jogo com R$ 200 de mentirinha e o caixa da casa com 1.000 apostadores. **Bilhete múltiplo**: a chance e a parte da casa conforme o número de jogos. A chance de acerto nunca é perguntada: sai da odd sem a margem da casa (5%).
 
 ## Estrutura
 ```
