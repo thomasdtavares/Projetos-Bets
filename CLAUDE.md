@@ -26,6 +26,8 @@ Chave do chat: copiar `.streamlit/secrets.toml.example` para `.streamlit/secrets
 - Streamlit: `$` em markdown vira fórmula, por isso o texto com `R$` é escapado (`brl_md`). A troca de aba pelo botão do chat usa `st.tabs(..., key="abas", on_change="rerun")`; por isso as chaves `sim_*` são reatribuídas no início do `app.py`. O `import pandas` no topo evita uma corrida de import.
 - A interface do simulador foi simplificada a pedido do dono: 4 campos na frente, o resto em "Opções avançadas" e em seções que se abrem.
 - Git: a máquina de casa (desktop) não tinha git; o commit inicial foi feito com a biblioteca `dulwich`. O envio ao GitHub é feito pelo GitHub Desktop (Push origin).
+- **Chance de acerto (15/10/2026):** o simulador não pergunta mais "quanto você acha que tem de chance". A chance sai da odd sem a margem da casa: `prob_justa(odd, margem) = (1/odd)/(1+margem)`, margem padrão 5% (`MARGEM_PADRAO`, próxima do exemplo 2,10/3,40/3,60 = 4,8% da ficha P3) ou calculada com `margem_das_odds([o1,o2,o3])`. A opção "Testar uma chance minha" continua, só como comparação. Na linha `[SIMULAR]`, `prob=` virou opcional e existe `margem=` (em %).
+- Visual (15/10/2026): tema em `.streamlit/config.toml`, CSS no topo do `app.py` (não aplicar fonte em `[class*="st-"]`: quebra os ícones), gráficos Plotly com a paleta azul (lucro/guardar) x vermelho (prejuízo/apostar).
 
 ## Estado e pendências (09/10/2026)
 Feito: interface, base de conhecimento, chat testado com Gemini real, simulador completo, testes, publicação.

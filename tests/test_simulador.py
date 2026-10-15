@@ -21,7 +21,46 @@ def test_exemplo_conteudo_iv():
     assert r["total_apostado"] == 2600
     assert r["kelly"] == 0
     assert "menor ou igual" in r["mensagem"]
+    assert r["retorno_por_100"] == pytest.approx(90)
     assert r["custo_oportunidade"]["total_acumulado"] > 2600
+
+
+# --- Chance de acerto tirada da odd (sem pedir palpite) ---------------------------
+
+def test_margem_das_odds_exemplo_da_ficha():
+    assert s.margem_das_odds(s.ODDS_EXEMPLO_1X2) == pytest.approx(0.0479, abs=1e-3)
+
+
+def test_prob_justa_tira_a_margem():
+    assert s.prob_justa(1.80, 0.05) == pytest.approx((1 / 1.80) / 1.05)
+    assert s.prob_justa(2.0, 0.0) == pytest.approx(0.5)
+
+
+def test_sem_margem_valor_esperado_zero_e_com_margem_negativo():
+    assert s.aposta_unica(100, 2.5, s.prob_justa(2.5, 0.0))["valor_esperado"] == pytest.approx(0)
+    # com margem m, de cada R$ 100 voltam 100 / (1 + m), qualquer que seja a odd
+    for odd in (1.30, 2.20, 7.00):
+        r = s.aposta_unica(100, odd, s.prob_justa(odd, 0.05))
+        assert r["retorno_por_100"] == pytest.approx(100 / 1.05)
+        assert r["valor_esperado"] < 0
+
+
+def test_resumo_sem_prob_usa_a_odd():
+    r = s.resumo_cenario(20, 2.20, None, 38, margem=0.05)
+    assert r["prob"] == pytest.approx((1 / 2.2) / 1.05)
+    assert r["perda_esperada"] == pytest.approx(20 * 38 * (1 / 1.05 - 1))
+
+
+@pytest.mark.parametrize("odds", [(2.0,), (4.0, 4.0, 4.0), (1.0, 2.0, 3.0)])
+def test_margem_das_odds_invalida(odds):
+    with pytest.raises(s.ErroValidacao):
+        s.margem_das_odds(odds)
+
+
+def test_custo_oportunidade_com_curva_apostando():
+    r = s.custo_oportunidade(50, "semanal", 52, 0, fator_retorno=0.9)
+    assert r["total_apostando"] == pytest.approx(2340)
+    assert r["diferenca"] == pytest.approx(260)
 
 
 def test_kelly_positivo_quando_ve_positivo():
@@ -138,6 +177,11 @@ def test_extrair_simular():
 def test_extrair_simular_campos_ausentes_e_percentual():
     _, p = s.extrair_simular("[SIMULAR valor=20 odd=2.20 prob=40 apostas=38]")
     assert p == dict(valor=20, odd=2.2, prob=0.4, apostas=38)
+
+
+def test_extrair_simular_sem_prob_com_margem():
+    _, p = s.extrair_simular("Texto\n[SIMULAR valor=20 odd=2.20 apostas=38 margem=4.8]")
+    assert p == dict(valor=20, odd=2.2, apostas=38, margem=pytest.approx(0.048))
 
 
 def test_sem_linha_simular():

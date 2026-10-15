@@ -2,6 +2,10 @@
 
 Convenções:
 - odd decimal O (> 1), probabilidade p em [0, 1], stake s em R$.
+- A chance de acerto NÃO é pedida ao usuário: ela sai da própria odd, tirando a
+  margem da casa (overround). p = (1/O) / (1 + margem). Ex.: odd 1,80 e margem
+  de 5% -> p = 55,56% / 1,05 = 52,91%. A margem pode vir de um valor de
+  referência ou ser calculada com as três odds do jogo (1X2).
 - taxa mensal em fração (0,008 = 0,8% ao mês) dentro das funções; a interface
   e a linha [SIMULAR ...] usam percentual (taxa=0.8).
 - Hipóteses: apostas independentes, odd e p constantes, sem bônus nem impostos.
@@ -13,6 +17,10 @@ import numpy as np
 MAX_APOSTAS = 5000
 MODOS = ("fixo", "percentual", "martingale")
 PERIODOS_POR_MES = {"diária": 365 / 12, "semanal": 52 / 12, "quinzenal": 26 / 12, "mensal": 1.0}
+# Margem de referência: próxima do exemplo da ficha sobre vantagem da casa
+# (odds 2,10 / 3,40 / 3,60 -> soma 104,8%, margem de 4,8%). O usuário pode mudar.
+MARGEM_PADRAO = 0.05
+ODDS_EXEMPLO_1X2 = (2.10, 3.40, 3.60)
 
 
 class ErroValidacao(ValueError):
@@ -42,6 +50,45 @@ def _pct(x):
     return f"{x * 100:.2f}%".replace(".", ",")
 
 
+def _brl(x):
+    return "R$ " + f"{x:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
+
+
+# ------------------------------------------------- chance de acerto a partir da odd
+
+def margem_das_odds(odds):
+    """Margem da casa (overround) de um mercado: soma de 1/odd de todos os resultados, menos 1.
+
+    Ex.: (2,10; 3,40; 3,60) -> 47,6% + 29,4% + 27,8% = 104,8% -> margem de 4,8%.
+    """
+    odds = [float(o) for o in odds]
+    if len(odds) < 2:
+        raise ErroValidacao("Informe as odds de todos os resultados do jogo (no 1X2 são três).")
+    for o in odds:
+        validar(odd=o)
+    margem = sum(1 / o for o in odds) - 1
+    if margem < 0:
+        raise ErroValidacao("Essas odds somam menos de 100%: confira se digitou as três odds do mesmo jogo.")
+    return margem
+
+
+def prob_justa(odd, margem=MARGEM_PADRAO):
+    """Chance de acerto estimada a partir da odd, retirando a margem da casa.
+
+    É a melhor estimativa neutra disponível sem palpite: a probabilidade implícita
+    (1/odd) dividida pela soma do mercado (1 + margem).
+    """
+    validar(odd=odd)
+    if margem is None or not 0 <= margem < 0.5:
+        raise ErroValidacao("A margem da casa deve estar entre 0% e 50%.")
+    return min((1 / odd) / (1 + margem), 1.0)
+
+
+def retorno_por_100(odd, prob):
+    """Quanto volta, em média, de cada R$ 100 apostados."""
+    return 100 * prob * odd
+
+
 # ---------------------------------------------------------------- aposta única
 
 def aposta_unica(valor, odd, prob):
@@ -51,19 +98,20 @@ def aposta_unica(valor, odd, prob):
     ve = valor * ve_unitario
     kelly = ve_unitario / (odd - 1) if ve_unitario > 0 else 0.0
     prob_implicita = 1 / odd
+    volta = retorno_por_100(odd, prob)
     if prob <= prob_implicita:
         mensagem = (
-            f"Pelas hipóteses que você inseriu, sua probabilidade ({_pct(prob)}) é menor ou igual à "
-            f"probabilidade implícita da odd ({_pct(prob_implicita)}). Isso significa valor esperado "
-            "negativo ou nulo: em média, cada aposta devolve menos do que foi colocada. "
-            "Isso não é uma previsão do jogo, é só a conta feita com os números que você informou."
+            f"A chance de acerto usada ({_pct(prob)}) é menor ou igual à chance que a odd paga "
+            f"({_pct(prob_implicita)}). Por isso o valor esperado é negativo ou nulo: de cada R$ 100 "
+            f"apostados, voltam em média {_brl(volta)}. A diferença é a margem da casa. "
+            "Isso não é uma previsão do jogo, é a conta feita com as hipóteses do cenário."
         )
     else:
         mensagem = (
-            f"Pelas hipóteses que você inseriu, sua probabilidade ({_pct(prob)}) é maior que a "
-            f"probabilidade implícita da odd ({_pct(prob_implicita)}), então o valor esperado sai positivo. "
-            "Lembre: odds já embutem a margem da casa, e sua estimativa é só um cenário, "
-            "não uma probabilidade verdadeira. Se ela estiver otimista, a conta muda de sinal."
+            f"A chance de acerto usada ({_pct(prob)}) é maior que a chance que a odd paga "
+            f"({_pct(prob_implicita)}), então o valor esperado sai positivo. Isso só acontece se você "
+            "estimar o jogo melhor do que a casa, de forma consistente e com folga para superar a margem. "
+            "A estimativa é um cenário, não uma probabilidade verdadeira: se estiver otimista, a conta muda de sinal."
         )
     return {
         "prob_implicita": prob_implicita,
@@ -74,13 +122,21 @@ def aposta_unica(valor, odd, prob):
         "ve_pct": ve_unitario,
         "prob_equilibrio": prob_implicita,
         "kelly": kelly,
+        "retorno_por_100": volta,
         "mensagem": mensagem,
     }
 
 
-def resumo_cenario(valor, odd, prob, apostas, taxa_mensal=None, periodicidade="semanal"):
-    """Números analíticos de um cenário (usados no resumo do chat)."""
+def resumo_cenario(valor, odd, prob, apostas, taxa_mensal=None, periodicidade="semanal",
+                   margem=MARGEM_PADRAO):
+    """Números analíticos de um cenário (usados no resumo do chat).
+
+    prob=None -> a chance de acerto sai da odd sem a margem (prob_justa).
+    """
+    if prob is None:
+        prob = prob_justa(odd, margem)
     r = aposta_unica(valor, odd, prob)
+    r["prob"] = prob
     validar(apostas=apostas)
     r["apostas"] = int(apostas)
     r["total_apostado"] = valor * apostas
@@ -128,6 +184,8 @@ def monte_carlo(valor, odd, prob, apostas, modo="fixo", banca=None, pct_banca=No
     amostra[:, 0] = saldo[:len(amostra)]
     faixa = np.empty((3, n + 1))  # P10, mediana, P90 em cada passo
     faixa[:, 0] = inicial
+    media_passo = np.empty(n + 1)  # média de todas as simulações em cada passo
+    media_passo[0] = inicial
 
     for t in range(n):
         if modo == "percentual":
@@ -149,6 +207,7 @@ def monte_carlo(valor, odd, prob, apostas, modo="fixo", banca=None, pct_banca=No
         dd_max = np.maximum(dd_max, pico - saldo)
         amostra[:, t + 1] = saldo[:len(amostra)]
         faixa[:, t + 1] = np.percentile(saldo, [10, 50, 90])
+        media_passo[t + 1] = saldo.mean()
 
     if tem_banca:
         ruina |= saldo <= 0.005
@@ -173,6 +232,7 @@ def monte_carlo(valor, odd, prob, apostas, modo="fixo", banca=None, pct_banca=No
         "inicial": float(inicial),
         "amostra": amostra,
         "faixa": faixa,
+        "media_passo": media_passo,
     }
 
 
@@ -204,10 +264,12 @@ def comparar_padroes(valor, odd, prob, apostas, banca, n_sim=10_000, semente=Non
 
 # ------------------------------------------------------- custo de oportunidade
 
-def custo_oportunidade(valor, periodicidade, n_periodos, taxa_mensal_pct):
+def custo_oportunidade(valor, periodicidade, n_periodos, taxa_mensal_pct, fator_retorno=None):
     """Total apostado x total acumulado se o mesmo fluxo fosse guardado a uma taxa mensal.
 
     taxa_mensal_pct em percentual ao mês (0,8 = 0,8% a.m.). Aportes no fim de cada período.
+    fator_retorno (opcional) = p x odd, quanto volta em média por R$ 1 apostado: gera a
+    curva "apostando" (o que sobra, em média, se o mesmo dinheiro for apostado).
     """
     validar(valor=valor, apostas=n_periodos, taxa_mensal=taxa_mensal_pct / 100)
     if periodicidade not in PERIODOS_POR_MES:
@@ -217,7 +279,7 @@ def custo_oportunidade(valor, periodicidade, n_periodos, taxa_mensal_pct):
     periodos = np.arange(0, n + 1)
     apostado = valor * periodos
     acumulado = valor * periodos if r == 0 else valor * ((1 + r) ** periodos - 1) / r
-    return {
+    saida = {
         "periodos": periodos,
         "apostado": apostado,
         "acumulado": acumulado,
@@ -225,18 +287,26 @@ def custo_oportunidade(valor, periodicidade, n_periodos, taxa_mensal_pct):
         "total_acumulado": float(acumulado[-1]),
         "rendimento": float(acumulado[-1] - apostado[-1]),
     }
+    if fator_retorno is not None:
+        apostando = apostado * fator_retorno
+        saida["apostando"] = apostando
+        saida["total_apostando"] = float(apostando[-1])
+        saida["diferenca"] = float(acumulado[-1] - apostando[-1])
+    return saida
 
 
 # ---------------------------------------------- integração com o chat ([SIMULAR])
 
 _RE_SIMULAR = re.compile(r"`{0,3}\[\s*SIMULAR\b([^\]]*)\]`{0,3}", re.IGNORECASE)
-_CAMPOS = {"valor", "odd", "prob", "apostas", "taxa", "banca", "pct", "modo"}
+_CAMPOS = {"valor", "odd", "prob", "apostas", "taxa", "banca", "pct", "modo", "margem"}
 
 
 def extrair_simular(texto):
     """Separa a linha [SIMULAR ...] do texto. Retorna (texto_limpo, params ou None).
 
-    params: dict com valor, odd, prob (fração), apostas, taxa (% a.m.), banca, pct (fração), modo.
+    params: dict com valor, odd, apostas, taxa (% a.m.), banca, pct (fração), modo,
+    margem (fração) e, só se o usuário insistir numa estimativa própria, prob (fração).
+    Sem prob, o app calcula a chance a partir da odd sem a margem.
     Campos ausentes ou ilegíveis ficam de fora.
     """
     achados = _RE_SIMULAR.findall(texto)
@@ -259,6 +329,8 @@ def extrair_simular(texto):
             continue
         if chave in ("prob", "pct") and v > 1:  # o modelo às vezes escreve 40 em vez de 0.40
             v = v / 100
+        if chave == "margem":  # sempre em percentual na linha (margem=4.8 -> 4,8%)
+            v = v / 100 if v >= 0.5 else v
         if chave == "apostas":
             v = int(v)
         params[chave] = v

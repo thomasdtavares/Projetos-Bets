@@ -6,7 +6,7 @@ Projeto da disciplina Projetos III — **Grupo 3** (Bernardo Nappo, Luc Le Corre
 
 ## Como funciona
 - **Aba Chat**: um modelo de linguagem responde com base na base de conhecimento (`conhecimento/base.md`, as 10 fichas do Conteúdo III) e nas regras de `prompt_sistema.md`. Quando o caso pede simulação, a resposta termina com uma linha `[SIMULAR ...]`; o app a esconde, calcula um resumo em Python e oferece o botão **Abrir no simulador**.
-- **Aba Simulador**: funciona sozinha, sem o chat. Aposta única (probabilidade implícita, valor esperado, Kelly), Monte Carlo com 10.000 simulações (stake fixa, percentual da banca e martingale, com semente opcional), comparação de padrões e custo de oportunidade, com gráficos em Plotly.
+- **Aba Simulador**: funciona sozinha, sem o chat. Não pede palpite: a chance de acerto sai da própria odd, sem a margem da casa (margem de referência de 5%, ou calculada com as 3 odds do jogo). Aposta única (quanto volta de cada R$ 100, valor esperado, ponto de equilíbrio), Monte Carlo com 10.000 simulações (stake fixa, percentual da banca e martingale, com semente opcional), comparação de padrões e custo de oportunidade, com gráficos em Plotly.
 
 ## Estrutura
 ```
@@ -43,4 +43,4 @@ pytest
 O roteiro de teste manual do chat está em `tests/roteiro_teste_chat.md`.
 
 ## Limites
-Cenários hipotéticos; apostas independentes; sem bônus, impostos ou limites de plataforma. As odds e probabilidades são informadas pelo usuário, o sistema não acessa odds reais.
+Cenários hipotéticos; apostas independentes; sem bônus, impostos ou limites de plataforma. A odd é informada pelo usuário e a chance de acerto é estimada a partir dela (1 ÷ odd ÷ (1 + margem)); o sistema não acessa odds reais.
