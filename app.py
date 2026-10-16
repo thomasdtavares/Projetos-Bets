@@ -6,8 +6,14 @@ import pandas  # noqa: F401  (importado cedo para evitar corrida de import entre
 import plotly.graph_objects as go
 import streamlit as st
 
+import importlib
+
 import llm
 import simulador as sim
+
+# No Streamlit Cloud, um novo commit roda o app.py de novo, mas o módulo simulador já importado continua
+# na memória com a versão antiga (o que gerou AttributeError em 16/10/2026). Recarregar garante a versão atual.
+sim = importlib.reload(sim)
 
 RAIZ = Path(__file__).parent
 EXEMPLOS = [
