@@ -259,3 +259,28 @@ def test_rodada_do_jogo():
     assert acertou and saldo == 210 and casa == pytest.approx(-10000)
     with pytest.raises(s.ErroValidacao):
         s.rodada_do_jogo(rng, 2.0, 0.5, 10, 5)
+
+
+# --- Ajustes do feedback (16/10/2026) ---------------------------------------------
+
+def test_ler_odds_exemplo_da_ficha():
+    r = s.ler_odds([2.10, 3.40, 3.60])
+    assert r["soma"] == pytest.approx(1.0479, abs=1e-3)
+    assert sum(r["justas"]) == pytest.approx(1)
+    assert r["implicitas"][0] == pytest.approx(1 / 2.1)
+
+
+def test_reapostar():
+    r = 1 / 1.05
+    nada = s.reapostar(1000, r, 0)
+    assert nada["apostado"] == pytest.approx(1000) and nada["sobra"] == pytest.approx(1000 * r)
+    tudo = s.reapostar(1000, r, 1)
+    assert tudo["sobra"] == pytest.approx(0) and tudo["apostado"] == pytest.approx(21000)
+    metade = s.reapostar(1000, r, 0.5)
+    assert nada["perda"] < metade["perda"] < tudo["perda"]
+    assert metade["apostado"] - metade["perda"] == pytest.approx(metade["apostado"] * r)
+
+
+def test_taxas_guardar_tem_fonte():
+    for taxa, fonte in s.TAXAS_GUARDAR.values():
+        assert 0 < taxa < 2 and "%" in fonte

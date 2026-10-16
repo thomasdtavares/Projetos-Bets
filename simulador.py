@@ -351,7 +351,15 @@ TIPOS_ODD = {"Favorito": 1.50, "Jogo equilibrado": 2.20, "Zebra": 5.00}
 HORIZONTES = {"1 mês": 4, "3 meses": 13, "6 meses": 26, "1 Brasileirão": 38,
               "1 ano": 52, "2 anos": 104, "5 anos": 260}
 APOSTAS_POR_SEMANA = (1, 2, 3, 5, 10)
-TAXA_GUARDAR = 0.8  # % ao mês, só para a comparação "e se guardasse" (exemplo, não recomendação)
+# Rendimento de "guardar" (% ao mês, bruto). Referências consultadas em 16/10/2026:
+# - Poupança: 0,6698% para depósitos com aniversário em 1º/10/2026 (taxas divulgadas pelo Banco Central).
+# - Tesouro Selic / CDB 100% do CDI: Selic de 13,75% ao ano (Copom, 16/09/2026) -> (1,1375)^(1/12) - 1 = 1,08% ao mês.
+TAXAS_GUARDAR = {
+    "Poupança": (0.67, "0,67% ao mês: rendimento da poupança em outubro de 2026 (Banco Central)"),
+    "Tesouro Selic ou CDB 100% do CDI": (1.08, "1,08% ao mês: equivale à Selic de 13,75% ao ano (Copom, 16/09/2026), antes do imposto de renda"),
+}
+TAXA_GUARDAR = TAXAS_GUARDAR["Poupança"][0]
+MARGEM_MIN, MARGEM_MAX = 0.03, 0.12
 
 
 def cenario_do_chat(apostas):
@@ -527,3 +535,35 @@ def rodada_do_jogo(rng, odd, prob, valor, saldo, n_outros=1000):
     acertos_outros = int(rng.binomial(n_outros, prob))
     casa = n_outros * valor - acertos_outros * valor * odd
     return acertou, novo, float(casa)
+
+
+# ------------------------------------------------------------- calculadora de odds
+
+def ler_odds(odds):
+    """Para as odds de todos os resultados de um jogo: chance que cada odd 'paga' (1/odd), soma,
+    margem da casa e a chance sem a margem (dividindo cada uma pela soma)."""
+    margem = margem_das_odds(odds)
+    impl = [1 / float(o) for o in odds]
+    soma = sum(impl)
+    return {"implicitas": impl, "soma": soma, "margem": margem, "justas": [i / soma for i in impl]}
+
+
+# ------------------------------------------------------------- reapostar o que volta
+
+def reapostar(deposito, fator_retorno, fracao):
+    """Média do que acontece quando, do dinheiro que volta das apostas, a pessoa reaposta 'fracao'
+    (0 = saca tudo, 1 = reaposta tudo até acabar).
+
+    Cada R$ 1 apostado devolve, em média, fator_retorno (= p x odd, ex.: 0,9524). Somando a série:
+    total apostado = depósito / (1 - fracao x r) e sobra = depósito x (1 - fracao) x r / (1 - fracao x r).
+    """
+    if not 0 <= fracao <= 1:
+        raise ErroValidacao("A fração reapostada deve estar entre 0 e 1.")
+    if not 0 < fator_retorno < 1:
+        raise ErroValidacao("O retorno médio por real apostado deve estar entre 0 e 1 (há margem da casa).")
+    validar(valor=deposito)
+    q = fracao * fator_retorno
+    apostado = deposito / (1 - q)
+    sobra = deposito * (1 - fracao) * fator_retorno / (1 - q)
+    return {"depositado": deposito, "apostado": apostado, "vezes": apostado / deposito, "sobra": sobra,
+            "perda": deposito - sobra}

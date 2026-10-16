@@ -88,6 +88,8 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 .card .linha { display: flex; justify-content: space-between; font-size: 0.92rem; padding: 4px 0;
                border-top: 1px solid #f3f2ee; color: #1f1e1c; }
 .card .linha b { font-weight: 700; }
+.card .nota { font-size: 0.83rem; color: #6b4a00; background: #fff7e6; border-radius: 8px; padding: 6px 8px;
+              margin-top: 8px; line-height: 1.35; }
 .card .tag { display: inline-block; font-size: 0.72rem; font-weight: 700; border-radius: 999px; padding: 2px 8px;
              background: var(--c); color: #fff; margin-bottom: 6px; }
 
@@ -157,8 +159,12 @@ def rodar_estrategias(valor, odd, prob, apostas, banca):
 
 # ------------------------------------------------------------------ estado
 
+o1, o2, o3 = sim.ODDS_EXEMPLO_1X2
 PADROES = dict(q_valor=20.0, q_tipo="Jogo equilibrado", q_odd_outra=1.80, q_por_semana=2, q_horizonte="1 ano",
-               q_banca=400.0, mult_tipo="Favorito", mult_jogos=3, jogo_tipo="Jogo equilibrado")
+               q_margem=sim.MARGEM_PADRAO * 100, q_taxa=list(sim.TAXAS_GUARDAR)[0], q_reaposta="Metade",
+               q_banca=400.0, mult_tipo="Favorito", mult_jogos=3, jogo_tipo="Jogo equilibrado",
+               calc_o1=o1, calc_o2=o2, calc_o3=o3)
+REAPOSTA = {"Nada (saco tudo)": 0.0, "Metade": 0.5, "Tudo, até acabar": 1.0}
 for k, v in PADROES.items():
     st.session_state[k] = st.session_state.get(k, v)  # reatribui: mantém o valor mesmo com a aba fechada
 st.session_state.setdefault("mensagens", [])
@@ -174,7 +180,7 @@ def cenario_atual():
     tipo = s.q_tipo or PADROES["q_tipo"]
     return {"valor": float(s.q_valor), "tipo": tipo, "odd": float(odd_do_tipo(tipo, s.q_odd_outra)),
             "por_semana": int(s.q_por_semana or PADROES["q_por_semana"]),
-            "horizonte": s.q_horizonte or PADROES["q_horizonte"]}
+            "horizonte": s.q_horizonte or PADROES["q_horizonte"], "margem": round(float(s.q_margem) / 100, 4)}
 
 
 def aplicar_cenario():
@@ -204,6 +210,8 @@ def abrir_no_simulador(p):
         s.q_por_semana, s.q_horizonte = sim.cenario_do_chat(int(p["apostas"]))
     if "banca" in p:
         s.q_banca = float(p["banca"])
+    if "margem" in p:
+        s.q_margem = min(max(float(p["margem"]) * 100, 0.0), 20.0)
     aplicar_cenario()
     s.abas = ABA_SIM
 
@@ -315,6 +323,22 @@ def grafico_trajetorias(r):
     return estilo(fig, "30 pessoas, aposta a aposta", "Número da aposta", "Ganho ou perda acumulada", altura=420)
 
 
+def grafico_reaposta(deposito, fator):
+    nomes = list(REAPOSTA)
+    sobras = [sim.reapostar(deposito, fator, f)["sobra"] for f in REAPOSTA.values()]
+    fig = go.Figure(go.Bar(x=nomes, y=sobras, marker_color=[AZUL, LARANJA, VERMELHO],
+                           text=[f"sobra {brl(v, 0)}" for v in sobras],
+                           textposition=["inside" if v > deposito * 0.15 else "outside" for v in sobras],
+                           insidetextanchor="middle", textfont=dict(size=14),
+                           hovertemplate="%{x}: sobra R$ %{y:,.0f}<extra></extra>"))
+    fig.add_hline(y=deposito, line_dash="dot", line_color=CINZA_TEXTO,
+                  annotation_text=f"você colocou {brl(deposito, 0)}", annotation_position="top right",
+                  annotation_font_color=CINZA_TEXTO)
+    fig = estilo(fig, "Quanto sobra, em média, conforme o quanto você reaposta", altura=340)
+    fig.update_yaxes(range=[0, deposito * 1.25])
+    return fig
+
+
 def grafico_estrategias(linhas):
     nomes = [l["nome"] for l in linhas]
     tudo = [l["perderam_tudo"] * 100 for l in linhas]
@@ -342,9 +366,9 @@ def grafico_jogo(hist, titulo, cor, ref=None):
     return fig
 
 
-def grafico_multipla(odd, escolhido, maximo=8):
+def grafico_multipla(odd, escolhido, margem, maximo=8):
     ks = list(range(1, maximo + 1))
-    chances = [sim.bilhete_multiplo(odd, k)["chance"] * 100 for k in ks]
+    chances = [sim.bilhete_multiplo(odd, k, margem)["chance"] * 100 for k in ks]
     cores = [AZUL if k == escolhido else "#b7d3f6" for k in ks]
     fig = go.Figure(go.Bar(x=[f"{k} jogo" + ("s" if k > 1 else "") for k in ks], y=chances, marker_color=cores,
                            text=[f"{c:.1f}%".replace(".", ",") if c >= 0.1 else "<0,1%" for c in chances],
@@ -429,14 +453,18 @@ def aba_chat():
 
 # --------------------------------------------------------------- Simulador
 
-def calcular(c):
+def margem_de(c):
+    return c.get("margem", sim.MARGEM_PADRAO)
+
+
+def calcular(c, taxa=sim.TAXA_GUARDAR):
     """Todos os números do cenário aplicado (conta exata, sem sorteio)."""
-    prob = sim.prob_justa(c["odd"])
+    prob = sim.prob_justa(c["odd"], margem_de(c))
     semanas = sim.HORIZONTES[c["horizonte"]]
     n = c["por_semana"] * semanas
     d = sim.distribuicao(c["valor"], c["odd"], prob, n)
     a = sim.aposta_unica(c["valor"], c["odd"], prob)
-    co = sim.custo_oportunidade(c["valor"] * c["por_semana"], "semanal", semanas, sim.TAXA_GUARDAR,
+    co = sim.custo_oportunidade(c["valor"] * c["por_semana"], "semanal", semanas, taxa,
                                 fator_retorno=prob * c["odd"])
     return {"prob": prob, "n": n, "semanas": semanas, "d": d, "a": a, "co": co, "g": sim.pessoas_em_100(d)}
 
@@ -452,6 +480,8 @@ def descrever_mudanca(ant, novo):
         partes.append(f"de {ant['por_semana']} para {novo['por_semana']} apostas por semana")
     if ant["horizonte"] != novo["horizonte"]:
         partes.append(f"o tempo de {ant['horizonte']} para {novo['horizonte']}")
+    if margem_de(ant) != margem_de(novo):
+        partes.append(f"a margem da casa de {pc(margem_de(ant))} para {pc(margem_de(novo))}")
     return ", ".join(partes)
 
 
@@ -481,6 +511,11 @@ def bloco_quanto_custa():
                             key="q_odd_outra")
         st.segmented_control("Por quanto tempo?", HORIZONTES, key="q_horizonte",
                              help="1 Brasileirão = 38 semanas, uma rodada por semana.")
+        with st.expander(f"Margem da casa: {pc(s.q_margem / 100)} (opcional: ajustar)"):
+            st.slider("Margem da casa (%)", 2.0, 15.0, step=0.1, key="q_margem", format="%.1f%%")
+            st.caption("É a parte que a casa embute nas odds. Usamos 5% como referência (o exemplo da nossa base soma "
+                       "104,8%). Em zebras e em mercados menos movimentados ela costuma ser maior. Para medir a margem "
+                       "de um jogo de verdade, use a aba **Ler as odds de um jogo**.")
         pendente = cenario_atual() != s.cen
         st.button("Ver o que acontece", type="primary", on_click=aplicar_cenario, width="stretch",
                   icon=":material/play_arrow:")
@@ -570,12 +605,32 @@ def bloco_quanto_custa():
 
     # --- guardar --------------------------------------------------------------------------
     secao("E se esse dinheiro fosse guardado?",
-          f"O mesmo valor, toda semana, rendendo {num(sim.TAXA_GUARDAR, 1)}% ao mês. É só um exemplo, não uma recomendação.")
+          "O mesmo valor, toda semana, numa aplicação simples. É só uma comparação, não uma recomendação de investimento.")
+    st.segmented_control("Guardar onde?", list(sim.TAXAS_GUARDAR), key="q_taxa")
+    taxa, fonte = sim.TAXAS_GUARDAR[s.q_taxa or PADROES["q_taxa"]]
+    co = calcular(c, taxa)["co"]
+    st.caption(f"Taxa usada: {fonte}. Valores consultados em 16/10/2026.")
     k = st.columns(3)
     k[0].metric("Guardando", brl(co["total_acumulado"], 0))
     k[1].metric("Apostando (o que volta, em média)", brl(co["total_apostando"], 0))
     k[2].metric("Diferença", brl(co["diferenca"], 0))
     st.plotly_chart(grafico_oportunidade(co), width="stretch", config=SEM_BARRA)
+
+    # --- reapostar --------------------------------------------------------------------------
+    secao("E se você reaposta o que volta?",
+          "Até aqui, supomos que o dinheiro que volta das apostas é sacado. Na prática, muita gente deixa na conta da bet "
+          "e aposta de novo. Aí o total apostado cresce, e a perda também.")
+    st.segmented_control("Do dinheiro que volta, quanto você aposta de novo?", list(REAPOSTA), key="q_reaposta")
+    fr = REAPOSTA[s.q_reaposta or PADROES["q_reaposta"]]
+    fator = r["prob"] * c["odd"]
+    rp = sim.reapostar(d["total_apostado"], fator, fr)
+    k = st.columns(3)
+    k[0].metric("Dinheiro que você colocou", brl(rp["depositado"], 0))
+    k[1].metric("Total que acaba apostado", brl(rp["apostado"], 0), help=f"{num(rp['vezes'], 1)} vezes o que você colocou.")
+    k[2].metric("Sobra, em média", brl(rp["sobra"], 0))
+    st.plotly_chart(grafico_reaposta(d["total_apostado"], fator), width="stretch", config=SEM_BARRA)
+    st.caption("Conta da média: cada R\\$ 1 apostado devolve, em média, R\\$ " + num(fator, 4) + ". Quem reaposta tudo "
+               "acaba, em média, perdendo todo o dinheiro que colocou, mesmo ganhando várias vezes no caminho.")
 
     with st.expander("Ver a simulação aposta a aposta (para curiosos)"):
         mc = rodar_mc(c["valor"], c["odd"], r["prob"], r["n"])
@@ -595,12 +650,13 @@ def bloco_estrategias():
                     key="q_banca", help="Ninguém aposta mais do que tem. Quando o dinheiro acaba, a pessoa para.")
     banca = s.q_banca
     try:
-        linhas = rodar_estrategias(c["valor"], c["odd"], sim.prob_justa(c["odd"]),
+        linhas = rodar_estrategias(c["valor"], c["odd"], sim.prob_justa(c["odd"], margem_de(c)),
                                    c["por_semana"] * sim.HORIZONTES[c["horizonte"]], banca)
     except sim.ErroValidacao as e:
         st.error(str(e))
         return
     cards = []
+    fixo = next(l for l in linhas if l["chave"] == "fixo")
     for l in linhas:
         if l["chave"] == "limite_perda":
             cor, tag = AZUL, "protege"
@@ -613,20 +669,36 @@ def bloco_estrategias():
         desc = l["descricao"]
         if l["chave"] in ("parar_no_lucro", "limite_perda"):
             desc += f" (aqui: {brl_html(banca / 2, 0)})"
+        notas = []
+        if l["chave"] != "fixo":
+            if l["perderam"] < fixo["perderam"] - 0.02 and l["perderam_tudo"] > fixo["perderam_tudo"] + 0.02:
+                notas.append(f"⚠️ Menos gente termina no prejuízo, mas <b>{l['perderam_tudo'] * 100:.0f} em 100 perdem "
+                             f"tudo</b> (contra {fixo['perderam_tudo'] * 100:.0f} apostando sempre o mesmo valor).")
+            if l["resultado_medio"] > fixo["resultado_medio"] + 1 and l["apostado_medio"] < fixo["apostado_medio"] * 0.9:
+                if l["chave"] == "limite_perda":
+                    notas.append(f"ℹ️ Perde menos porque para no limite: aposta {brl_html(l['apostado_medio'], 0)} no total, "
+                                 f"contra {brl_html(fixo['apostado_medio'], 0)}. A casa continua levando a mesma parte de cada aposta.")
+                else:
+                    notas.append(f"⚠️ A perda média parece menor só porque essas pessoas <b>apostam menos no total</b> "
+                                 f"({brl_html(l['apostado_medio'], 0)} contra {brl_html(fixo['apostado_medio'], 0)}). "
+                                 "Por real apostado, a casa leva o mesmo.")
         cards.append(
             f'<div class="card" style="--c:{cor}"><span class="tag">{tag}</span><h4>{l["nome"]}</h4>'
             f'<div class="d">{desc}</div>'
             f'<div class="linha"><span>Perderam dinheiro</span><b>{l["perderam"] * 100:.0f} em 100</b></div>'
             f'<div class="linha"><span>Perderam tudo</span><b>{l["perderam_tudo"] * 100:.0f} em 100</b></div>'
+            f'<div class="linha"><span>Total apostado (média)</span><b>{brl_html(l["apostado_medio"], 0)}</b></div>'
             f'<div class="linha"><span>Resultado médio</span><b>{brl_html(l["resultado_medio"], 0)}</b></div>'
             f'<div class="linha"><span>De cada {brl_html(100, 0)} apostados, voltam</span>'
-            f'<b>{brl_html(l["retorno_por_100"], 0)}</b></div></div>')
+            f'<b>{brl_html(l["retorno_por_100"], 0)}</b></div>'
+            + "".join(f'<div class="nota">{n}</div>' for n in notas) + "</div>")
     st.markdown(f'<div class="cards">{"".join(cards)}</div>', unsafe_allow_html=True)
     st.plotly_chart(grafico_estrategias(linhas), width="stretch", config=SEM_BARRA)
     st.markdown(
         '<div class="resultado"><div class="rotulo azul">O que isso mostra</div>'
         '<div class="peq"><b>Nenhuma estratégia vence a parte da casa.</b> Em todas, de cada R&#36; 100 apostados voltam '
-        "por volta de R&#36; 95. As estratégias só mudam o jeito de perder: dobrar depois de perder ou apostar alto "
+        "praticamente os mesmos valores. Quando uma estratégia parece \"perder menos\", é porque a pessoa parou antes "
+        "e apostou menos no total, ou porque trocou muitas perdas pequenas por poucas perdas enormes. As estratégias só mudam o jeito de perder: dobrar depois de perder ou apostar alto "
         "para recuperar fazem muita gente perder tudo de uma vez. Um <b>limite de perda</b> não dá lucro, mas impede que "
         "a perda passe do valor que você decidiu antes, com calma. As bets autorizadas são obrigadas a oferecer "
         "ferramentas de limite, e dá para bloquear o CPF em gov.br/autoexclusaoapostas.</div></div>",
@@ -643,7 +715,7 @@ def reiniciar_jogo():
 def apostar(vezes):
     s = st.session_state
     odd = sim.TIPOS_ODD[s.jogo_tipo or "Jogo equilibrado"]
-    prob = sim.prob_justa(odd)
+    prob = sim.prob_justa(odd, margem_de(s.cen))
     for _ in range(vezes):
         if s.jogo_saldo < JOGO_APOSTA:
             break
@@ -660,17 +732,17 @@ def bloco_jogo():
     s = st.session_state
     if "jogo_saldo" not in s:
         reiniciar_jogo()
-    st.markdown(f"Você começa com **{brl_md(JOGO_INICIO, 0)} de mentirinha**. Cada clique é uma aposta de "
-                f"**{brl_md(JOGO_APOSTA, 0)}**. Ao mesmo tempo, outras **1.000 pessoas** fazem a mesma aposta, e "
-                "a gente mostra o que acontece com o caixa da casa.")
+    st.markdown(f"Uma **simulação educativa, sem dinheiro de verdade**: você começa com {brl_md(JOGO_INICIO, 0)} fictícios "
+                f"e cada clique sorteia uma aposta de {brl_md(JOGO_APOSTA, 0)}. Ao mesmo tempo, outras **1.000 pessoas** "
+                "fazem a mesma aposta, e a gente mostra o que acontece com o caixa da casa.")
     st.segmented_control("Tipo de aposta", list(sim.TIPOS_ODD), key="jogo_tipo", disabled=s.jogo_n > 0,
                          format_func=lambda t: f"{t} · odd {num(sim.TIPOS_ODD[t])}",
                          help="Para trocar o tipo, recomece o jogo.")
     b = st.columns([1.2, 1.2, 1, 2])
     acabou = s.jogo_saldo < JOGO_APOSTA
-    b[0].button(f"Apostar {brl_md(JOGO_APOSTA, 0)}", type="primary", on_click=apostar, args=(1,), disabled=acabou,
-                width="stretch", icon=":material/sports_soccer:")
-    b[1].button("Apostar 10 vezes", on_click=apostar, args=(10,), disabled=acabou, width="stretch",
+    b[0].button("Sortear 1 aposta", on_click=apostar, args=(1,), disabled=acabou, width="stretch",
+                icon=":material/science:")
+    b[1].button("Sortear 10 apostas", on_click=apostar, args=(10,), disabled=acabou, width="stretch",
                 icon=":material/fast_forward:")
     b[2].button("Recomeçar", on_click=reiniciar_jogo, width="stretch", type="tertiary", icon=":material/refresh:")
 
@@ -687,7 +759,7 @@ def bloco_jogo():
         f'<div><div class="r">Você acertou</div><div class="v">{s.jogo_acertos} de {s.jogo_n}</div>'
         f'<div class="r">{pc(s.jogo_acertos / s.jogo_n, 0) if s.jogo_n else "–"} das apostas</div></div>'
         f'<div><div class="r">Caixa da casa (1.000 pessoas)</div><div class="v">{brl_html(s.jogo_casa, 0)}</div>'
-        f'<div class="r">{"a casa está ganhando" if s.jogo_casa > 0 else "a casa está perdendo, por enquanto"}</div></div>'
+        f'<div class="r">{"nenhuma aposta ainda" if s.jogo_n == 0 else "a casa está ganhando" if s.jogo_casa > 0 else "a casa está perdendo, por enquanto"}</div></div>'
         "</div>", unsafe_allow_html=True)
     if s.jogo_n:
         g1, g2 = st.columns(2)
@@ -698,13 +770,19 @@ def bloco_jogo():
     if acabou:
         st.error(f"Seu dinheiro do jogo acabou depois de {s.jogo_n} apostas, e você acertou {s.jogo_acertos} delas. "
                  "A casa não precisou adivinhar nenhum resultado: só cobrou a parte dela em cada aposta.")
-    elif s.jogo_n >= 20:
-        texto = (f"Depois de {s.jogo_n} apostas, você acertou {s.jogo_acertos} e está "
-                 f"{'com ' + brl_md(dif) + ' a mais' if dif > 0 else 'com ' + brl_md(-dif) + ' a menos'}. ")
-        texto += ("Você pode estar com sorte agora, mas a casa, apostando contra 1.000 pessoas, quase nunca perde: "
-                  "a parte dela vem de todo mundo, ganhando ou perdendo." if dif > 0 else
-                  "Repare que a casa não precisou acertar nada: ela ganha com a soma de todas as apostas.")
-        st.info(texto)
+    if s.jogo_n >= 20:
+        apostado = s.jogo_n * JOGO_APOSTA
+        voltou = apostado + dif
+        casa_100 = 100 * s.jogo_casa / (s.jogo_n * 1000 * JOGO_APOSTA)
+        st.markdown(
+            '<div class="resultado"><div class="rotulo azul">Resumo das suas ' + str(s.jogo_n) + ' apostas</div>'
+            f'<div class="peq">Você apostou <b>{brl_html(apostado, 0)}</b> no total e voltaram <b>{brl_html(voltou, 0)}</b>: '
+            f'está com <b>{brl_html(abs(dif), 0)} {"a mais" if dif > 0 else "a menos"}</b> do que começou. '
+            f'Com as 1.000 pessoas juntas, a casa ficou com <b>{brl_html(s.jogo_casa, 0)}</b>, cerca de '
+            f'<b>{brl_html(casa_100)}</b> de cada {brl_html(100, 0)} apostados. '
+            + ("Você pode estar com sorte agora, mas a casa não depende de sorte: a parte dela vem de todo mundo."
+               if dif > 0 else "A casa não precisou acertar nenhum resultado: ela ganha com a soma de todas as apostas.")
+            + "</div></div>", unsafe_allow_html=True)
 
 
 def bloco_multipla():
@@ -717,7 +795,8 @@ def bloco_multipla():
     c2.slider("Quantos jogos no bilhete", 1, 8, key="mult_jogos")
     odd = sim.TIPOS_ODD[s.mult_tipo or "Favorito"]
     k = s.mult_jogos
-    b = sim.bilhete_multiplo(odd, k)
+    m_c = margem_de(s.cen)
+    b = sim.bilhete_multiplo(odd, k, m_c)
     um_em = 1 / b["chance"] if b["chance"] > 0 else float("inf")
     st.markdown(
         f'<div class="resultado"><div class="rotulo">Bilhete com {k} jogo{"s" if k > 1 else ""}</div>'
@@ -725,20 +804,75 @@ def bloco_multipla():
         f'Mas a chance de acertar tudo é de <span class="neg">{pc(b["chance"], 1 if b["chance"] >= 0.001 else 2)}</span>: '
         f'cerca de 1 bilhete em cada {f"{um_em:,.0f}".replace(",", ".")}.</div>'
         + f'<div class="peq">Além disso, a parte da casa também se multiplica: num bilhete de {k} jogo{"s" if k > 1 else ""}, de cada '
-        f'R&#36; 100 apostados voltam em média {brl_html(b["retorno_por_100"])} (numa aposta simples, {brl_html(100 / (1 + sim.MARGEM_PADRAO))}).</div></div>',
+        f'R&#36; 100 apostados voltam em média {brl_html(b["retorno_por_100"])} (numa aposta simples, {brl_html(100 / (1 + m_c))}).</div></div>',
         unsafe_allow_html=True)
     m = st.columns(3)
     m[0].metric("Odd do bilhete", num(b["odd_total"]))
     m[1].metric("Chance de acertar tudo", pc(b["chance"], 2))
     m[2].metric("De cada R$ 100, voltam", brl(b["retorno_por_100"]))
-    st.plotly_chart(grafico_multipla(odd, k), width="stretch", config=SEM_BARRA)
+    st.plotly_chart(grafico_multipla(odd, k, m_c), width="stretch", config=SEM_BARRA)
+
+
+def usar_margem(m):
+    st.session_state.q_margem = round(min(max(m * 100, 2.0), 15.0), 1)
+    aplicar_cenario()
+    st.session_state.margem_aplicada = True
+
+
+def grafico_odds(info, nomes):
+    cores = [AZUL, CINZA, LARANJA]
+    fig = go.Figure()
+    for nome, v, cor in zip(nomes, info["implicitas"], cores):
+        fig.add_bar(y=[""], x=[v * 100], orientation="h", name=nome, marker_color=cor,
+                    marker_line=dict(color="#fcfcfb", width=2), text=[f"{nome}: {pc(v)}"], textposition="inside",
+                    insidetextanchor="middle", textfont=dict(color="#fff"),
+                    hovertemplate=f"{nome}: %{{x:.1f}}%<extra></extra>")
+    fig.add_vline(x=100, line_color=TINTA, line_width=2, annotation_text="100%", annotation_position="top")
+    fig = estilo(fig, f"As chances que as odds pagam somam {pc(info['soma'])}", altura=210, moeda=False)
+    fig.update_layout(barmode="stack", showlegend=False, margin=dict(t=60, b=8, l=8, r=8))
+    fig.update_xaxes(ticksuffix="%", range=[0, max(110, info["soma"] * 100 + 5)], title="")
+    fig.update_yaxes(visible=False)
+    return fig
+
+
+def bloco_odds():
+    s = st.session_state
+    st.markdown("Toda odd esconde uma chance: **1 ÷ odd**. Digite as odds dos três resultados de um jogo e veja quanto a "
+                "casa embute de margem. Se as chances somam mais de 100%, a diferença é a parte da casa.")
+    c = st.columns(3)
+    c[0].number_input("Odd da vitória do mandante", min_value=1.01, step=0.05, format="%.2f", key="calc_o1")
+    c[1].number_input("Odd do empate", min_value=1.01, step=0.05, format="%.2f", key="calc_o2")
+    c[2].number_input("Odd da vitória do visitante", min_value=1.01, step=0.05, format="%.2f", key="calc_o3")
+    nomes = ["Mandante", "Empate", "Visitante"]
+    odds = [s.calc_o1, s.calc_o2, s.calc_o3]
+    try:
+        info = sim.ler_odds(odds)
+    except sim.ErroValidacao as e:
+        st.error(str(e))
+        return
+    st.markdown(
+        f'<div class="resultado"><div class="rotulo">Margem deste jogo</div>'
+        f'<div class="grande">A casa embute <span class="neg">{pc(info["margem"])}</span> de margem neste jogo.</div>'
+        f'<div class="peq">Num mercado sem margem, as três chances somariam exatamente 100%. Aqui somam {pc(info["soma"])}. '
+        f'Na prática, de cada {brl_html(100, 0)} apostados neste jogo, voltam em média cerca de '
+        f'{brl_html(100 / (1 + info["margem"]))}.</div></div>', unsafe_allow_html=True)
+    st.plotly_chart(grafico_odds(info, nomes), width="stretch", config=SEM_BARRA)
+    tabela = [{"Resultado": n, "Odd": num(o), "Chance que a odd paga (1 ÷ odd)": pc(i),
+               "Chance sem a margem": pc(j)} for n, o, i, j in zip(nomes, odds, info["implicitas"], info["justas"])]
+    st.dataframe(tabela, hide_index=True, width="stretch")
+    st.caption("A \"chance sem a margem\" divide cada chance pela soma. É uma estimativa, não a chance verdadeira do jogo, "
+               "que ninguém conhece. Odds só devem ser digitadas para entender o preço, nunca como palpite.")
+    st.button(f"Usar a margem de {pc(info['margem'])} no simulador", on_click=usar_margem, args=(info["margem"],),
+              icon=":material/input:")
+    if s.pop("margem_aplicada", False):
+        st.success("Pronto. A aba **Quanto custa apostar** já está usando essa margem.")
 
 
 def aba_simulador():
     st.markdown("Veja, com números simples, **o que acontece com o seu dinheiro** quando você aposta. "
                 "Não é previsão de jogo nem indicação de aposta.")
-    t1, t2, t3, t4 = st.tabs(["💸 Quanto custa apostar", "🎯 Estratégias", "🎮 Aposte rodada a rodada",
-                              "🎟️ Bilhete múltiplo"])
+    t1, t2, t3, t4, t5 = st.tabs(["💸 Quanto custa apostar", "🎯 Estratégias", "🎮 Aposte rodada a rodada",
+                                  "🎟️ Bilhete múltiplo", "🧮 Ler as odds de um jogo"])
     with t1:
         bloco_quanto_custa()
     with t2:
@@ -747,17 +881,24 @@ def aba_simulador():
         bloco_jogo()
     with t4:
         bloco_multipla()
+    with t5:
+        bloco_odds()
 
     with st.expander("Como calculamos (hipóteses)"):
+        poup, selic = sim.TAXAS_GUARDAR.values()
         st.markdown(
-            "- **Chance de acertar:** tirada da própria odd, sem a parte da casa: (1 ÷ odd) ÷ (1 + margem), com margem "
-            "de 5% (próxima do exemplo da nossa base: odds 2,10 / 3,40 / 3,60 somam 104,8%). Não é a chance "
-            "verdadeira do jogo, que ninguém conhece.\n"
-            "- Com margem *m*, de cada R\\$ 100 apostados voltam em média R\\$ 100 ÷ (1 + *m*), qualquer que seja a odd.\n"
+            "- **Chance de acertar:** tirada da própria odd, sem a parte da casa: (1 ÷ odd) ÷ (1 + margem). A margem "
+            "padrão é 5%, próxima do exemplo da nossa base (odds 2,10 / 3,40 / 3,60 somam 104,8%), e pode ser ajustada. "
+            "Não é a chance verdadeira do jogo, que ninguém conhece.\n"
+            "- Com margem *m*, de cada R\\$ 100 apostados voltam em média R\\$ 100 ÷ (1 + *m*). Na prática, a margem "
+            "costuma ser maior em zebras e em mercados menos movimentados (o chamado *favorite-longshot bias*); o "
+            "simulador usa a mesma margem para todas as odds, o que é uma simplificação.\n"
             "- **100 pessoas** e **tempo**: conta exata pela distribuição binomial (número de acertos em *n* apostas). "
             "**Estratégias**, **aposta a aposta** e **jogo**: sorteios (simulação de Monte Carlo).\n"
             "- Cada aposta é **independente** das outras; não entram bônus, promoções, impostos nem limites das plataformas.\n"
-            f"- **Guardar**: o mesmo valor semanal rendendo {num(sim.TAXA_GUARDAR, 1)}% ao mês, só como exemplo. "
+            "- Fora da seção \"reapostar\", supomos que o dinheiro que volta **não é reapostado**. Na seção, a conta é a "
+            "da média: total apostado = colocado ÷ (1 − fração reapostada × retorno por real).\n"
+            f"- **Guardar** (valores consultados em 16/10/2026): poupança, {poup[1]}; Tesouro Selic ou CDB, {selic[1]}. "
             "Não é recomendação de investimento.\n"
             "- Tipos de aposta (odds 1,50 / 2,20 / 5,00) são ilustrativos, sem relação com jogos reais.")
 
