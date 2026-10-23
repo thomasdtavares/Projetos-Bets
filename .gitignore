@@ -9,3 +9,4 @@ venv/
 docs/*.docx
 Novo(a)*.docx
 *.log
+registros/

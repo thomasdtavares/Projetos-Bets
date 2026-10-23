@@ -36,10 +36,14 @@ Se as duas existirem, o Gemini é usado. Sem nenhuma chave, o chat mostra um avi
 ## Publicar na internet (para outras pessoas usarem pelo link)
 O jeito mais simples e gratuito é o Streamlit Community Cloud (share.streamlit.io): entre com a conta do GitHub, escolha este repositório, o arquivo `app.py` e, em *Advanced settings > Secrets*, cole `GEMINI_API_KEY = "sua-chave"`. O app ganha um link público que funciona em qualquer navegador, sem instalar nada.
 
+## Testes com usuários
+Cada resposta do chat tem 👍/👎. As perguntas e avaliações ficam num registro anônimo (`registros/interacoes.csv`). Para baixá-lo pelo app publicado, crie nos Secrets do Streamlit uma senha `EQUIPE_SENHA = "..."` e use a aba **Sobre > Área da equipe**. O registro é apagado quando o app reinicia ou recebe um commit novo: baixe ao fim de cada sessão de testes.
+
 ## Testes
 ```bash
 pytest
 ```
+(`tests/test_simulador.py` confere as contas; `tests/test_chat.py` confere novas tentativas, respostas prontas e registro, sem chamar o modelo.)
 O roteiro de teste manual do chat está em `tests/roteiro_teste_chat.md`.
 
 ## Limites

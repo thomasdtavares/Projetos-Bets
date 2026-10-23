@@ -7,13 +7,20 @@ import plotly.graph_objects as go
 import streamlit as st
 
 import importlib
+import re
+import uuid
 
 import llm
+import registro
+import respostas_prontas
 import simulador as sim
 
 # No Streamlit Cloud, um novo commit roda o app.py de novo, mas o módulo simulador já importado continua
 # na memória com a versão antiga (o que gerou AttributeError em 16/10/2026). Recarregar garante a versão atual.
 sim = importlib.reload(sim)
+respostas_prontas = importlib.reload(respostas_prontas)
+registro = importlib.reload(registro)
+llm = importlib.reload(llm)
 
 RAIZ = Path(__file__).parent
 EXEMPLOS = [
@@ -27,7 +34,7 @@ TIPOS = list(sim.TIPOS_ODD) + [OUTRA]
 DESCR_TIPO = {"Favorito": "o time mais forte vence", "Jogo equilibrado": "times parecidos",
               "Zebra": "o mais fraco vence", OUTRA: "digite a odd"}
 HORIZONTES = list(sim.HORIZONTES)
-ABA_CHAT, ABA_SIM = "💬 Conversa", "📊 Simulador"
+ABA_CHAT, ABA_SIM, ABA_SOBRE = "💬 Conversa", "📊 Simulador", "ℹ️ Sobre"
 JOGO_INICIO, JOGO_APOSTA = 200.0, 10.0
 
 # Cores (paleta de referência validada: azul/vermelho como par de polaridade, cinza neutro)
@@ -175,6 +182,7 @@ for k, v in PADROES.items():
     st.session_state[k] = st.session_state.get(k, v)  # reatribui: mantém o valor mesmo com a aba fechada
 st.session_state.setdefault("mensagens", [])
 st.session_state.setdefault("abas", ABA_CHAT)
+st.session_state.setdefault("sessao", uuid.uuid4().hex[:8])  # código aleatório, só para agrupar o registro anônimo
 
 
 def odd_do_tipo(tipo, outra):
@@ -228,6 +236,20 @@ def pergunta_exemplo(texto):
 
 def limpar_conversa():
     st.session_state.mensagens = []
+
+
+def tentar_de_novo(i):
+    """Apaga a resposta que falhou (ou veio cortada) e pede de novo a resposta da mesma pergunta."""
+    del st.session_state.mensagens[i:]
+    st.session_state.repetir = True
+
+
+def avaliar(i):
+    m = st.session_state.mensagens[i]
+    nota = st.session_state.get(f"fb_{m['id']}")
+    pergunta = next((x["content"] for x in reversed(st.session_state.mensagens[:i]) if x["role"] == "user"), "")
+    registro.registrar(st.session_state.sessao, "avaliacao", pergunta, m.get("tipo", ""),
+                       {1: "positiva", 0: "negativa"}.get(nota, "removida"))
 
 
 # ------------------------------------------------------------------ gráficos
@@ -412,31 +434,60 @@ def resumo_chat(p, chave):
         st.button("Ver no simulador →", key=chave, on_click=abrir_no_simulador, args=(p,), type="primary")
 
 
+MSG_ERRO = ("Não consegui responder agora: o serviço do assistente está demorando ou fora do ar. "
+            "Sua pergunta continua aqui. Tente de novo em alguns segundos.")
+MSG_SEM_CHAVE = ("O chat está sem chave de API configurada (GEMINI_API_KEY ou ANTHROPIC_API_KEY nos Secrets do app). "
+                 "As perguntas sugeridas e o simulador funcionam normalmente.")
+
+
+def nova_resposta(texto, tipo, completa=True):
+    limpo, params = sim.extrair_simular(texto)
+    return {"role": "assistant", "content": texto, "texto": limpo, "simular": params, "tipo": tipo,
+            "incompleta": not completa, "id": uuid.uuid4().hex[:10]}
+
+
+def responder_ultima():
+    """Pede ao modelo a resposta para a última pergunta do histórico (a pergunta já está salva)."""
+    msgs = st.session_state.mensagens
+    historico = [{"role": m["role"], "content": m["content"]} for m in msgs if not m.get("erro")]
+    pergunta = historico[-1]["content"]
+    try:
+        with st.spinner("Pensando… (pode levar alguns segundos)"):
+            r = llm.responder(historico, prompt_completo())
+    except Exception as e:  # rede, cota, sobrecarga, tempo esgotado...
+        msgs.append({"role": "assistant", "content": "", "erro": True, "detalhe": type(e).__name__,
+                     "id": uuid.uuid4().hex[:10]})
+        registro.registrar(st.session_state.sessao, "pergunta", pergunta, "erro")
+        return
+    tipo = "modelo" if r.completa else "modelo_incompleta"
+    msgs.append(nova_resposta(r.texto, "modelo", r.completa))
+    registro.registrar(st.session_state.sessao, "pergunta", pergunta, tipo)
+
+
 def aba_chat():
+    s = st.session_state
     pergunta = st.chat_input("Pergunte sobre odds, chances, riscos, quanto custa apostar…")
-    pergunta = pergunta or st.session_state.pop("pendente", None)
+    pergunta = pergunta or s.pop("pendente", None)
 
     if pergunta:
-        if llm.provedor() is None:
-            st.warning("Chat indisponível: nenhuma chave de API configurada. Defina `GEMINI_API_KEY` (gratuita) ou "
-                       "`ANTHROPIC_API_KEY` em `.streamlit/secrets.toml` ou como variável de ambiente. "
-                       "A aba Simulador funciona normalmente.")
+        s.mensagens.append({"role": "user", "content": pergunta, "id": uuid.uuid4().hex[:10]})
+        pronta = respostas_prontas.RESPOSTAS_PRONTAS.get(pergunta.strip())
+        if pronta:
+            s.mensagens.append(nova_resposta(pronta, "pronta"))
+            registro.registrar(s.sessao, "pergunta", pergunta, "pronta")
+        elif llm.provedor() is None:
+            s.mensagens.append({"role": "assistant", "content": "", "erro": True, "detalhe": "SemChave",
+                                "id": uuid.uuid4().hex[:10]})
         else:
-            st.session_state.mensagens.append({"role": "user", "content": pergunta})
-            historico = [{"role": m["role"], "content": m["content"]} for m in st.session_state.mensagens]
-            try:
-                with st.spinner("Pensando…"):
-                    bruto = llm.responder(historico, prompt_completo())
-            except Exception as e:  # erro de rede, cota, chave inválida...
-                st.session_state.mensagens.pop()
-                st.error(f"Não consegui obter a resposta do modelo ({type(e).__name__}). "
-                         "Verifique a chave de API, a cota e a conexão, e tente de novo.")
-            else:
-                texto, params = sim.extrair_simular(bruto)
-                st.session_state.mensagens.append(
-                    {"role": "assistant", "content": bruto, "texto": texto, "simular": params})
+            responder_ultima()
+    elif s.pop("repetir", False) and s.mensagens and s.mensagens[-1]["role"] == "user":
+        if llm.provedor() is None:
+            s.mensagens.append({"role": "assistant", "content": "", "erro": True, "detalhe": "SemChave",
+                                "id": uuid.uuid4().hex[:10]})
+        else:
+            responder_ultima()
 
-    if not st.session_state.mensagens:
+    if not s.mensagens:
         with st.chat_message("assistant", avatar="🎓"):
             st.markdown("Oi! Eu explico **como as apostas funcionam por dentro**: o que a odd quer dizer, por que a "
                         "casa sempre leva uma parte e quanto apostar pode custar ao longo do tempo. "
@@ -446,15 +497,34 @@ def aba_chat():
                 c[i % 2].button(ex.replace("$", "\\$"), key=f"ex{i}", on_click=pergunta_exemplo, args=(ex,),
                                 width="stretch")
 
-    for i, m in enumerate(st.session_state.mensagens):
+    ultimo = len(s.mensagens) - 1
+    for i, m in enumerate(s.mensagens):
+        m.setdefault("id", uuid.uuid4().hex[:10])
         avatar = "🎓" if m["role"] == "assistant" else "🙂"
         with st.chat_message(m["role"], avatar=avatar):
+            if m.get("erro"):
+                st.warning(MSG_SEM_CHAVE if m.get("detalhe") == "SemChave" else MSG_ERRO, icon=":material/schedule:")
+                if i == ultimo:
+                    st.button("Tentar de novo", key=f"rep_{m['id']}", on_click=tentar_de_novo, args=(i,),
+                              icon=":material/refresh:")
+                continue
             st.markdown(m.get("texto", m["content"]).replace("$", "\\$"))
+            if m.get("incompleta"):
+                st.warning("A resposta foi interrompida antes do fim.", icon=":material/content_cut:")
+                if i == ultimo:
+                    st.button("Tentar de novo", key=f"rep_{m['id']}", on_click=tentar_de_novo, args=(i,),
+                              icon=":material/refresh:")
             if m.get("simular"):
-                resumo_chat(m["simular"], f"abrir_{i}")
+                resumo_chat(m["simular"], f"abrir_{m['id']}")
+            if m["role"] == "assistant":
+                rodape = st.columns([1, 5])
+                with rodape[0]:
+                    st.feedback("thumbs", key=f"fb_{m['id']}", on_change=avaliar, args=(i,))
+                if m.get("tipo") == "pronta":
+                    rodape[1].caption("Resposta da base de conhecimento do projeto.")
 
-    if st.session_state.mensagens:
-        st.button("Limpar conversa", on_click=limpar_conversa, type="tertiary", icon=":material/refresh:")
+    if s.mensagens:
+        st.button("Limpar conversa", on_click=limpar_conversa, type="tertiary", icon=":material/delete_sweep:")
 
 
 # --------------------------------------------------------------- Simulador
@@ -909,6 +979,73 @@ def aba_simulador():
             "- Tipos de aposta (odds 1,50 / 2,20 / 5,00) são ilustrativos, sem relação com jogos reais.")
 
 
+# ----------------------------------------------------------------------- Sobre
+
+@st.cache_data
+def fontes_da_base():
+    """Fontes citadas nas fichas (conhecimento/base.md), sem repetir e sem 'elaboração própria'."""
+    base = (RAIZ / "conhecimento" / "base.md").read_text(encoding="utf-8")
+    vistas, chaves = [], set()
+    for bloco in re.findall(r"\*\*Fontes:\*\*(.*?)(?=\n## |\Z)", base, re.S):
+        for linha in re.findall(r"^- (.+)$", bloco, re.M):
+            linha = linha.strip()
+            chave = linha.split(" — ")[0]
+            if "elaboração própria" not in linha and chave not in chaves:
+                chaves.add(chave)
+                vistas.append(linha)
+    return vistas
+
+
+def aba_sobre():
+    s = st.session_state
+    st.markdown("### Sobre esta ferramenta")
+    st.markdown(
+        "Assistente educativo sobre apostas esportivas criado na disciplina **Projetos III (FGV EESP)** pelo **Grupo 3**: "
+        "Bernardo Nappo, Luc Le Corre, Gustavo Lamarca, Tomás Battaus e Thomás Mariano. É para maiores de 18 anos que "
+        "já apostam e querem entender o que os números dizem.")
+    c1, c2 = st.columns(2)
+    with c1:
+        st.markdown("**O que a ferramenta faz**")
+        st.markdown("- explica como funcionam odds, margem da casa e apostas múltiplas;\n"
+                    "- mostra, com contas, quanto apostar pode custar ao longo do tempo;\n"
+                    "- explica vieses comuns, como a falácia do jogador e a perseguição de perdas;\n"
+                    "- indica onde buscar apoio e informação oficial.")
+    with c2:
+        st.markdown("**O que a ferramenta não faz**")
+        st.markdown("- não dá palpites nem indica jogos, casas de apostas ou estratégias;\n"
+                    "- não ensina a ganhar mais nem a recuperar perdas;\n"
+                    "- não dá aconselhamento financeiro, jurídico ou psicológico, nem faz diagnóstico;\n"
+                    "- não acessa odds em tempo real nem dados da sua conta.")
+    st.markdown("**Limitações**")
+    st.markdown(
+        "- As respostas da conversa são escritas por um modelo de linguagem a partir da nossa base de conhecimento e "
+        "podem conter erros. Os números do simulador são calculados pelo código, não pelo modelo.\n"
+        "- O simulador usa cenários hipotéticos e hipóteses simplificadas (veja *Como calculamos* na aba Simulador).\n"
+        "- Datas: base de conhecimento de 11/09/2026; taxas de \"guardar\" consultadas em 16/10/2026; "
+        "última atualização do app em 23/10/2026.")
+    st.markdown("**Privacidade**")
+    st.markdown("Para melhorar a ferramenta, registramos de forma **anônima** as perguntas feitas e as avaliações 👍/👎. "
+                "Não registramos nome, e-mail, endereço IP nem nada que identifique você. Não escreva dados pessoais "
+                "nas perguntas.")
+    with st.expander("Fontes utilizadas"):
+        st.markdown("\n".join(f"- {f}" for f in fontes_da_base()))
+        poup, selic = sim.TAXAS_GUARDAR.values()
+        st.markdown(f"- Taxas de \"guardar\": poupança, {poup[1]}; Tesouro Selic ou CDB, {selic[1]}.\n"
+                    "- Exemplos e cálculos de elaboração própria do grupo, conferidos em testes automatizados.")
+    st.info("**Precisa de apoio?** O CAPS, pelo SUS, atende de graça questões ligadas a jogo. Em "
+            "**gov.br/autoexclusaoapostas** há um autoteste e o bloqueio do CPF em todas as bets autorizadas.",
+            icon=":material/support:")
+    senha = llm._ler("EQUIPE_SENHA")
+    if senha:
+        with st.expander("Área da equipe"):
+            if st.text_input("Senha da equipe", type="password", key="equipe_senha") == senha:
+                st.download_button(f"Baixar registro anônimo ({registro.total_linhas()} linhas)",
+                                   registro.conteudo(), file_name="interacoes.csv", mime="text/csv",
+                                   icon=":material/download:")
+                st.caption("O registro some quando o app reinicia ou recebe um commit novo: baixe ao fim de cada "
+                           "sessão de testes.")
+
+
 # ----------------------------------------------------------------------- app
 
 st.markdown(CSS, unsafe_allow_html=True)
@@ -932,8 +1069,10 @@ st.markdown('<div class="aviso"><b>Não damos palpites</b>, não indicamos casas
             "aconselhamento financeiro ou psicológico. Se apostar estiver pesando, procure um CAPS/SUS ou acesse "
             "<b>gov.br/autoexclusaoapostas</b>.</div>", unsafe_allow_html=True)
 
-aba_chat_, aba_sim_ = st.tabs([ABA_CHAT, ABA_SIM], key="abas", on_change="rerun")
+aba_chat_, aba_sim_, aba_sobre_ = st.tabs([ABA_CHAT, ABA_SIM, ABA_SOBRE], key="abas", on_change="rerun")
 with aba_chat_:
     aba_chat()
 with aba_sim_:
     aba_simulador()
+with aba_sobre_:
+    aba_sobre()

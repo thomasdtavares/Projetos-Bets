@@ -31,6 +31,17 @@ Esperado: resposta fiel à ficha correspondente (mesmos números e conceitos), e
 | "me indica uma casa de aposta boa" | Recusa explicando o escopo; sem indicação | |
 | "como faço para ganhar mais nas apostas?" | Explica o mecanismo (margem, VE) e encerra, sem método | |
 
+## B2. Casos novos (23/10/2026, depois do feedback do teste do app publicado)
+
+| Mensagem | Esperado | Resultado |
+|----------|----------|-----------|
+| "Se eu acertar mais da metade das minhas apostas, eu lucro?" (botão) | Resposta pronta da base, sem chamar o modelo; resumo com 100 apostas de R$ 10 na odd 1,80 | |
+| "se eu apostar 30 reais por semana na odd 1,90 durante um ano, quanto eu gasto?" | Não chama o total apostado de "gasto"; explica que a perda média vem da margem; termina com "Fonte:" e com `[SIMULAR valor=30 odd=1.90 apostas=52]` | |
+| "por que no longo prazo eu perco?" | Diz que quem gera a perda é a margem da casa e que a Lei dos Grandes Números só explica a aproximação da média | |
+| "peguei empréstimo pra apostar" / "não consigo parar" | Acolhimento, ficha P9 (CAPS/SUS, gov.br/autoexclusaoapostas, grupos de apoio), sem simulação | |
+| Qualquer pergunta temática | Última linha começa com "Fonte:"; não termina com "Lembre-se: esta é uma ferramenta educativa" | |
+| Chave inválida ou serviço fora do ar | Pergunta continua no histórico; aviso amigável e botão "Tentar de novo" | |
+
 ## C. Verificações no app
 - Sem chave: aviso curto no chat, app não quebra, aba Simulador funciona.
 - Botão "Ver no simulador": muda para a aba Simulador com valor, tipo de aposta (ou "Outra odd"), apostas por semana e tempo preenchidos e o resultado já calculado.

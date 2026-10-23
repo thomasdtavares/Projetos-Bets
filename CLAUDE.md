@@ -5,12 +5,14 @@ Trabalho de faculdade. App em Python + Streamlit com duas abas (Chat e Simulador
 Repositório: https://github.com/thomasdtavares/Projetos-Bets (app publicado no Streamlit Community Cloud a partir da branch `main`; o link do app está no painel share.streamlit.io da conta do GitHub do dono).
 
 ## Arquivos
-- `app.py`: interface (abas Conversa e Simulador, botão "Ver no simulador" no chat).
+- `app.py`: interface (abas Conversa, Simulador e Sobre; botão "Ver no simulador" no chat).
 - `simulador.py`: cálculos puros (aposta única, Monte Carlo 10.000, fixo/percentual/martingale, custo de oportunidade, `extrair_simular`). Os números do app vêm daqui, nunca do modelo.
-- `llm.py`: `responder(mensagens, prompt_sistema)`. Gemini (se houver `GEMINI_API_KEY`) ou Claude (`ANTHROPIC_API_KEY`).
+- `llm.py`: `responder(mensagens, prompt_sistema) -> Resposta(texto, completa)`. Gemini (se houver `GEMINI_API_KEY`) ou Claude (`ANTHROPIC_API_KEY`). `com_tentativas` faz novas tentativas com espera, troca de modelo e limite de 50 s; resposta cortada volta com `completa=False`.
+- `respostas_prontas.py`: respostas fixas (tiradas das fichas) para as 4 perguntas sugeridas; não chamam o modelo.
+- `registro.py`: registro anônimo (pergunta, tipo de resposta, 👍/👎) em `registros/interacoes.csv` (fora do git; some quando o app reinicia). Download na aba Sobre > Área da equipe, se o secret `EQUIPE_SENHA` existir.
 - `prompt_sistema.md`: regras do assistente + formato da linha `[SIMULAR valor=.. odd=.. prob=.. apostas=.. taxa=.. banca=.. pct=.. modo=..]`.
 - `conhecimento/base.md`: as 10 fichas e o texto de escopo do Conteúdo III (extraídos sem reescrever). É carregada inteira no prompt (sem RAG).
-- `tests/test_simulador.py` (44 testes, `pytest`), `tests/roteiro_teste_chat.md`, `tests/saida_teste_chat.md` (respostas reais do Gemini aos 13 casos do roteiro).
+- `tests/test_simulador.py` (44 testes) e `tests/test_chat.py` (11 testes, sem chamar modelo), `tests/roteiro_teste_chat.md`, `tests/saida_teste_chat.md` (respostas reais do Gemini aos 13 casos do roteiro).
 - `Implementacao_I_preenchido.docx`: relatório da entrega, com capturas em `docs/evidencias/`.
 
 ## Como rodar
@@ -28,6 +30,7 @@ Chave do chat: copiar `.streamlit/secrets.toml.example` para `.streamlit/secrets
 - Git: a máquina de casa (desktop) não tinha git; o commit inicial foi feito com a biblioteca `dulwich`. O envio ao GitHub é feito pelo GitHub Desktop (Push origin).
 - **Chance de acerto (15/10/2026):** o simulador não pergunta mais "quanto você acha que tem de chance". A chance sai da odd sem a margem da casa: `prob_justa(odd, margem) = (1/odd)/(1+margem)`, margem padrão 5% (`MARGEM_PADRAO`, próxima do exemplo 2,10/3,40/3,60 = 4,8% da ficha P3) ou calculada com `margem_das_odds([o1,o2,o3])`. "Testar uma chance minha" saiu da tela em 15/10 por confundir o público; a margem voltou a ser ajustável em 16/10 (ver abaixo), fora do fluxo principal. Na linha `[SIMULAR]`, `prob=` virou opcional e existe `margem=` (em %).
 - **Ajustes do feedback (16/10/2026):** cartões de estratégia com "Total apostado (média)" e notas automáticas quando uma estratégia "parece" melhor (menos gente perde mas mais gente perde tudo; ou perde menos só porque aposta menos no total). Margem ajustável (2% a 15%, em "Margem da casa" no cenário, entra em `cen["margem"]`) e nova sub-aba "Ler as odds de um jogo" (`ler_odds`), com botão para usar a margem no simulador. Seção "E se você reaposta o que volta?" (`reapostar`, conta da média: apostado = colocado ÷ (1 − f·r)). Taxa de "guardar" com fonte (`TAXAS_GUARDAR`: poupança 0,67% a.m., Banco Central out/2026; Tesouro Selic/CDB 1,08% a.m. = Selic 13,75% a.a., Copom 16/09/2026; consultadas em 16/10/2026, atualizar se mudar). Mini-jogo sem cara de bet: botões "Sortear 1/10 apostas", texto "simulação educativa", "nenhuma aposta ainda" e resumo depois de 20 apostas.
+- **Chat robusto e preciso (23/10/2026, feedback do app publicado):** a pergunta é salva antes de chamar o modelo; erro vira aviso amigável com botão "Tentar de novo"; resposta cortada aparece com aviso e o mesmo botão; `MAX_TOKENS` subiu de 1500 para 4096 (uma resposta foi cortada no meio). O prompt agora exige linha "Fonte:" no fim, proíbe chamar total apostado de "gasto", diz que a perda vem da margem (a LGN só explica a convergência), proíbe prometer números que o resumo não mostra e o lembrete genérico no fim de toda resposta; inclui "empréstimo" e "não consigo parar" como sinais de risco. Avaliação 👍/👎 em cada resposta. Aba "Sobre" com autores, o que faz/não faz, limitações, datas, privacidade e fontes (lidas de `base.md`).
 - Visual (15/10/2026): tema em `.streamlit/config.toml`, CSS no topo do `app.py` (não aplicar fonte em `[class*="st-"]`: quebra os ícones), gráficos Plotly com a paleta azul (lucro/guardar) x vermelho (prejuízo/apostar).
 
 ## Estado e pendências (09/10/2026)
