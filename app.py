@@ -29,6 +29,14 @@ EXEMPLOS = [
     "Vale a pena dobrar a aposta para recuperar o que perdi?",
     "Se eu apostar R$ 20 por rodada do Brasileirão numa odd 2,20, quanto isso pode custar?",
 ]
+# Texto curto dos botões (cabe no celular) -> pergunta completa enviada ao chat
+ROTULOS = {
+    "Como funciona uma aposta esportiva?": "Como funciona uma aposta?",
+    "Se eu acertar mais da metade das minhas apostas, eu lucro?": "Acertar mais da metade dá lucro?",
+    "Vale a pena dobrar a aposta para recuperar o que perdi?": "Dobrar para recuperar funciona?",
+    "Se eu apostar R$ 20 por rodada do Brasileirão numa odd 2,20, quanto isso pode custar?":
+        "R$ 20 por rodada na odd 2,20: quanto custa?",
+}
 OUTRA = "Outra odd"
 TIPOS = list(sim.TIPOS_ODD) + [OUTRA]
 DESCR_TIPO = {"Favorito": "o time mais forte vence", "Jogo equilibrado": "times parecidos",
@@ -53,8 +61,21 @@ h1, h2, h3 { letter-spacing: -0.01em; }
 
 .hero { background: linear-gradient(135deg, #0f2f57 0%, #1d5fb0 55%, #2a78d6 100%); color: #fff;
         border-radius: 20px; padding: 28px 32px; margin-bottom: 14px; }
-.hero h1 { color: #fff; font-size: 2rem; font-weight: 800; margin: 0 0 6px 0; padding: 0; }
-.hero p { color: #dce9fa; margin: 0; font-size: 1.03rem; }
+.hero h1 { color: #fff; font-size: 1.75rem; font-weight: 800; margin: 0 0 4px 0; padding: 0; line-height: 1.2; }
+.hero p { color: #dce9fa; margin: 0; font-size: 1rem; }
+@media (max-width: 640px) {
+  .block-container { padding-top: 0.6rem; padding-left: 0.8rem; padding-right: 0.8rem; }
+  .hero { padding: 14px 16px; border-radius: 14px; margin-bottom: 8px; }
+  .hero h1 { font-size: 1.25rem; }
+  .hero p { font-size: 0.9rem; }
+  .selo { display: none; }
+  .aviso { font-size: 0.8rem; padding: 8px 12px; }
+  .resultado { padding: 16px 16px; }
+  .resultado .grande { font-size: 1.3rem; }
+  .secao { font-size: 1.1rem; }
+  .stTabs [data-baseweb="tab"] { padding: 0 10px; font-size: 0.92rem; }
+  [data-testid="stMetricValue"] { font-size: 1.25rem; }
+}
 .selo { display: inline-block; background: rgba(255,255,255,0.16); color: #fff; border-radius: 999px;
         padding: 3px 12px; font-size: 0.8rem; margin-bottom: 10px; font-weight: 600; }
 .aviso { background: #f3f2ee; border-radius: 12px; padding: 10px 16px; font-size: 0.88rem; color: #52514e;
@@ -288,7 +309,7 @@ def grafico_para_onde_vai(volta):
                       paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
                       font=dict(family="Inter, system-ui, sans-serif", color="#fff", size=14),
                       bargap=0.1, separators=",.")
-    fig.update_xaxes(visible=False, range=[0, max(100, volta) * 1.3])
+    fig.update_xaxes(visible=False, range=[0, max(100, volta) * 1.45])
     fig.update_yaxes(visible=False)
     return fig
 
@@ -426,7 +447,7 @@ def resumo_chat(p, chave):
                 c = st.columns(4)
                 c[0].metric("De cada R$ 100, voltam", brl(r["retorno_por_100"]))
                 c[1].metric("Total apostado", brl(r["total_apostado"]))
-                c[2].metric("Resultado médio", brl(r["perda_esperada"]))
+                c[2].metric("Perda média", brl(-r["perda_esperada"]))
                 c[3].metric("De 100 pessoas, perdem", f"{sim.pessoas_em_100(d)['perderam']}")
         else:
             st.caption("Ainda faltam dados para a conta (valor, odd e número de apostas). "
@@ -466,7 +487,7 @@ def responder_ultima():
 
 def aba_chat():
     s = st.session_state
-    pergunta = st.chat_input("Pergunte sobre odds, chances, riscos, quanto custa apostar…")
+    pergunta = st.chat_input("Pergunte o que quiser sobre apostas…")
     pergunta = pergunta or s.pop("pendente", None)
 
     if pergunta:
@@ -489,13 +510,13 @@ def aba_chat():
 
     if not s.mensagens:
         with st.chat_message("assistant", avatar="🎓"):
-            st.markdown("Oi! Eu explico **como as apostas funcionam por dentro**: o que a odd quer dizer, por que a "
-                        "casa sempre leva uma parte e quanto apostar pode custar ao longo do tempo. "
-                        "Não dou palpites. Comece por uma destas perguntas ou escreva a sua:")
+            st.markdown("Oi! Eu te mostro **como a aposta funciona por dentro**: o que a odd quer dizer, quanto a casa "
+                        "leva de cada aposta e quanto isso pesa no fim do mês. Sem palpite e sem julgamento. "
+                        "Toque numa pergunta ou escreva a sua:")
             c = st.columns(2)
             for i, ex in enumerate(EXEMPLOS):
-                c[i % 2].button(ex.replace("$", "\\$"), key=f"ex{i}", on_click=pergunta_exemplo, args=(ex,),
-                                width="stretch")
+                c[i % 2].button(ROTULOS.get(ex, ex).replace("$", "\\$"), key=f"ex{i}", on_click=pergunta_exemplo,
+                                args=(ex,), width="stretch", help=ex.replace("$", "\\$"))
 
     ultimo = len(s.mensagens) - 1
     for i, m in enumerate(s.mensagens):
@@ -616,10 +637,10 @@ def bloco_quanto_custa():
         if ant:
             st.markdown(
                 f'<div class="mudou">🔄 Você mudou {descrever_mudanca(s.cen_ant, c)}.<br>'
-                f'Resultado médio: antes <b>{brl_html(ant["d"]["resultado_medio"])}</b> → agora '
-                f'<b>{brl_html(d["resultado_medio"])}</b> · Pessoas no prejuízo: antes <b>{ant["g"]["perderam"]}</b> '
+                f'Perda média: antes <b>{brl_html(-ant["d"]["resultado_medio"])}</b> → agora '
+                f'<b>{brl_html(-d["resultado_medio"])}</b> · Pessoas no prejuízo: antes <b>{ant["g"]["perderam"]}</b> '
                 f'→ agora <b>{g["perderam"]}</b> em 100'
-                + ("<br>O resultado médio não mudou: a casa cobra a mesma parte em qualquer tipo de aposta. "
+                + ("<br>A perda média não mudou: a casa cobra a mesma parte em qualquer tipo de aposta. "
                    "O que muda é como a sorte se espalha entre as pessoas."
                    if abs(ant["d"]["resultado_medio"] - d["resultado_medio"]) < 0.5 and ant["d"]["apostas"] == d["apostas"]
                    and ant["d"]["total_apostado"] == d["total_apostado"] else "")
@@ -652,8 +673,9 @@ def bloco_quanto_custa():
     m[0].metric("Total apostado", brl(d["total_apostado"], 0),
                 delta=delta(d["total_apostado"] - ant_r["d"]["total_apostado"]) if ant_r else None,
                 delta_color="off")
-    m[1].metric("Resultado médio", brl(d["resultado_medio"], 0),
-                delta=delta(d["resultado_medio"] - ant_r["d"]["resultado_medio"]) if ant_r else None)
+    m[1].metric("Perda média", brl(-d["resultado_medio"], 0),
+                delta=delta(ant_r["d"]["resultado_medio"] - d["resultado_medio"]) if ant_r else None,
+                delta_color="inverse")
     m[2].metric("De 100 pessoas, perdem", f"{g['perderam']}",
                 delta=delta(g["perderam"] - ant_r["g"]["perderam"], moeda=False) if ant_r else None,
                 delta_color="inverse")
@@ -677,7 +699,7 @@ def bloco_quanto_custa():
     if linhas:
         st.caption(f"Depois de 1 mês: cerca de {linhas[0]['tendencia'] * 100:.0f} em 100 estão no lucro. "
                    f"Depois de {linhas[-1]['mes'] // 12} anos: cerca de {linhas[-1]['tendencia'] * 100:.0f} em 100, "
-                   f"e o resultado médio chega a {brl_md(linhas[-1]['resultado_medio'], 0)}.")
+                   f"e a perda média chega a {brl_md(-linhas[-1]['resultado_medio'], 0)}.")
 
     # --- guardar --------------------------------------------------------------------------
     secao("E se esse dinheiro fosse guardado?",
@@ -693,22 +715,22 @@ def bloco_quanto_custa():
     st.plotly_chart(grafico_oportunidade(co), width="stretch", config=SEM_BARRA)
 
     # --- reapostar --------------------------------------------------------------------------
-    secao("E se você reaposta o que volta?",
-          "Até aqui, supomos que o dinheiro que volta das apostas é sacado. Na prática, muita gente deixa na conta da bet "
-          "e aposta de novo. Aí o total apostado cresce, e a perda também.")
-    st.segmented_control("Do dinheiro que volta, quanto você aposta de novo?", list(REAPOSTA), key="q_reaposta")
-    fr = REAPOSTA[s.q_reaposta or PADROES["q_reaposta"]]
-    fator = r["prob"] * c["odd"]
-    rp = sim.reapostar(d["total_apostado"], fator, fr)
-    k = st.columns(3)
-    k[0].metric("Dinheiro que você colocou", brl(rp["depositado"], 0))
-    k[1].metric("Total que acaba apostado", brl(rp["apostado"], 0), help=f"{num(rp['vezes'], 1)} vezes o que você colocou.")
-    k[2].metric("Sobra, em média", brl(rp["sobra"], 0))
-    st.plotly_chart(grafico_reaposta(d["total_apostado"], fator), width="stretch", config=SEM_BARRA)
-    st.caption("Conta da média: cada R\\$ 1 apostado devolve, em média, R\\$ " + num(fator, 4) + ". Quem reaposta tudo "
-               "acaba, em média, perdendo todo o dinheiro que colocou, mesmo ganhando várias vezes no caminho.")
+    with st.expander("🔁 E se você reaposta o que ganha?"):
+        st.markdown("Até aqui, a conta supõe que o dinheiro que volta é sacado. Na prática, muita gente deixa na conta "
+                    "da casa de apostas e aposta de novo. Aí o total apostado cresce, e a perda também.")
+        st.segmented_control("Do dinheiro que volta, quanto você aposta de novo?", list(REAPOSTA), key="q_reaposta")
+        fr = REAPOSTA[s.q_reaposta or PADROES["q_reaposta"]]
+        fator = r["prob"] * c["odd"]
+        rp = sim.reapostar(d["total_apostado"], fator, fr)
+        k = st.columns(3)
+        k[0].metric("Dinheiro que você colocou", brl(rp["depositado"], 0))
+        k[1].metric("Total que acaba apostado", brl(rp["apostado"], 0), help=f"{num(rp['vezes'], 1)} vezes o que você colocou.")
+        k[2].metric("Sobra, em média", brl(rp["sobra"], 0))
+        st.plotly_chart(grafico_reaposta(d["total_apostado"], fator), width="stretch", config=SEM_BARRA)
+        st.caption("Conta da média: cada R\\$ 1 apostado devolve, em média, R\\$ " + num(fator, 4) + ". Quem reaposta tudo "
+                   "acaba, em média, perdendo todo o dinheiro que colocou, mesmo ganhando várias vezes no caminho.")
 
-    with st.expander("Ver a simulação aposta a aposta (para curiosos)"):
+    with st.expander("📈 Ver a simulação aposta a aposta (para curiosos)"):
         mc = rodar_mc(c["valor"], c["odd"], r["prob"], r["n"])
         st.markdown("Aqui sorteamos 10.000 vezes as mesmas apostas. Cada linha é uma pessoa: algumas sobem um "
                     "tempo, mas a linha preta (a média de todas) desce sem parar.")
@@ -764,7 +786,7 @@ def bloco_estrategias():
             f'<div class="linha"><span>Perderam dinheiro</span><b>{l["perderam"] * 100:.0f} em 100</b></div>'
             f'<div class="linha"><span>Perderam tudo</span><b>{l["perderam_tudo"] * 100:.0f} em 100</b></div>'
             f'<div class="linha"><span>Total apostado (média)</span><b>{brl_html(l["apostado_medio"], 0)}</b></div>'
-            f'<div class="linha"><span>Resultado médio</span><b>{brl_html(l["resultado_medio"], 0)}</b></div>'
+            f'<div class="linha"><span>Perda média</span><b>{brl_html(-l["resultado_medio"], 0)}</b></div>'
             f'<div class="linha"><span>De cada {brl_html(100, 0)} apostados, voltam</span>'
             f'<b>{brl_html(l["retorno_por_100"], 0)}</b></div>'
             + "".join(f'<div class="nota">{n}</div>' for n in notas) + "</div>")
@@ -941,14 +963,12 @@ def bloco_odds():
     st.button(f"Usar a margem de {pc(info['margem'])} no simulador", on_click=usar_margem, args=(info["margem"],),
               icon=":material/input:")
     if s.pop("margem_aplicada", False):
-        st.success("Pronto. A aba **Quanto custa apostar** já está usando essa margem.")
+        st.success("Pronto. A aba **Quanto custa** já está usando essa margem.")
 
 
 def aba_simulador():
-    st.markdown("Veja, com números simples, **o que acontece com o seu dinheiro** quando você aposta. "
-                "Não é previsão de jogo nem indicação de aposta.")
-    t1, t2, t3, t4, t5 = st.tabs(["💸 Quanto custa apostar", "🎯 Estratégias", "🎮 Aposte rodada a rodada",
-                                  "🎟️ Bilhete múltiplo", "🧮 Ler as odds de um jogo"])
+    st.caption("Contas com cenários de exemplo. Não é previsão de jogo nem indicação de aposta.")
+    t1, t2, t3, t4, t5 = st.tabs(["💸 Quanto custa", "🎯 Estratégias", "🎮 Jogo", "🎟️ Múltipla", "🧮 Ler odds"])
     with t1:
         bloco_quanto_custa()
     with t2:
@@ -960,7 +980,7 @@ def aba_simulador():
     with t5:
         bloco_odds()
 
-    with st.expander("Como calculamos (hipóteses)"):
+    with st.expander("Como fizemos as contas"):
         poup, selic = sim.TAXAS_GUARDAR.values()
         st.markdown(
             "- **Chance de acertar:** tirada da própria odd, sem a parte da casa: (1 ÷ odd) ÷ (1 + margem). A margem "
@@ -1020,7 +1040,7 @@ def aba_sobre():
     st.markdown(
         "- As respostas da conversa são escritas por um modelo de linguagem a partir da nossa base de conhecimento e "
         "podem conter erros. Os números do simulador são calculados pelo código, não pelo modelo.\n"
-        "- O simulador usa cenários hipotéticos e hipóteses simplificadas (veja *Como calculamos* na aba Simulador).\n"
+        "- O simulador usa cenários hipotéticos e hipóteses simplificadas (veja *Como fizemos as contas* na aba Simulador).\n"
         "- Datas: base de conhecimento de 11/09/2026; taxas de \"guardar\" consultadas em 16/10/2026; "
         "última atualização do app em 23/10/2026.")
     st.markdown("**Privacidade**")
@@ -1062,12 +1082,12 @@ with st.sidebar:
 
 st.markdown(
     '<div class="hero"><span class="selo">🎓 Ferramenta educativa · 18+</span>'
-    "<h1>Apostas esportivas: o que os números dizem</h1>"
-    "<p>Converse sobre odds, chances e riscos, ou simule o que acontece com o seu dinheiro ao longo do tempo.</p></div>",
+    "<h1>Bets: o que os números dizem</h1>"
+    "<p>Tire suas dúvidas e veja, com contas simples, o que acontece com o seu dinheiro quando você aposta.</p></div>",
     unsafe_allow_html=True)
-st.markdown('<div class="aviso"><b>Não damos palpites</b>, não indicamos casas de apostas e não fazemos '
-            "aconselhamento financeiro ou psicológico. Se apostar estiver pesando, procure um CAPS/SUS ou acesse "
-            "<b>gov.br/autoexclusaoapostas</b>.</div>", unsafe_allow_html=True)
+st.markdown('<div class="aviso">🔒 <b>Aqui ninguém dá palpite</b> nem indica casa de apostas. Apostar está pesando? '
+            "O CAPS (SUS) atende de graça, e <b>gov.br/autoexclusaoapostas</b> bloqueia seu CPF.</div>",
+            unsafe_allow_html=True)
 
 aba_chat_, aba_sim_, aba_sobre_ = st.tabs([ABA_CHAT, ABA_SIM, ABA_SOBRE], key="abas", on_change="rerun")
 with aba_chat_:
