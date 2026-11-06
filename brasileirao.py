@@ -11,6 +11,8 @@ RESULTADOS = ("1", "X", "2")
 COLUNAS_ODDS = ("odd_1", "odd_X", "odd_2")
 CENTAVO = Decimal("0.01")
 MAX_VALOR = Decimal("1000000.00")
+SALDO_INICIAL = 50000  # centavos; todo o caixa da sessão usa inteiros
+MAX_JOGOS_RODADA = 10
 
 
 class ErroBrasileirao(ValueError):
@@ -104,3 +106,88 @@ def simular_jogo(jogo, escolha, valor, rng=None):
             "data_fonte": jogo["data_fonte"], "consulta": jogo["consulta"],
             "escolha": escolha, "resultado": resultado, "acertou": acertou,
             "retorno": retorno, "liquido": liquido}
+
+
+def centavos(valor):
+    return int(Decimal(str(valor)) * 100)
+
+
+def nova_sessao():
+    return {"saldo": SALDO_INICIAL, "rodadas": [], "encerrada": False}
+
+
+def preparar_rodada(apostas, saldo):
+    """Valida a rodada inteira antes de sortear ou movimentar o caixa."""
+    if not 1 <= len(apostas) <= MAX_JOGOS_RODADA:
+        raise ErroBrasileirao("Inclua de 1 a 10 confrontos na rodada.")
+    ids, total, preparados = set(), 0, []
+    for aposta in apostas:
+        jogo = aposta["jogo"]
+        if jogo["id"] in ids:
+            raise ErroBrasileirao("Cada confronto pode aparecer apenas uma vez na mesma rodada.")
+        ids.add(jogo["id"])
+        bilhete = calcular_bilhete(jogo, aposta["escolha"], aposta["valor"])
+        total += centavos(bilhete["valor"])
+        preparados.append({"jogo": dict(jogo), "escolha": aposta["escolha"], **bilhete})
+    if total > saldo:
+        raise ErroBrasileirao("O total das apostas ultrapassa o saldo disponível. Reduza os valores ou remova um jogo.")
+    return preparados, total
+
+
+def executar_rodada(sessao, apostas, rng=None):
+    """Liquida todas as apostas de uma rodada sem usar retornos antecipados."""
+    if sessao["encerrada"] or sessao["saldo"] <= 0:
+        raise ErroBrasileirao("Esta sessão já terminou. Comece uma nova sessão para simular.")
+    preparados, total = preparar_rodada(apostas, sessao["saldo"])
+    rng = rng if rng is not None else np.random.default_rng()
+    resultados = []
+    for aposta in preparados:
+        r = simular_jogo(aposta["jogo"], aposta["escolha"], aposta["valor"], rng)
+        r["prob"] = probabilidades(aposta["jogo"])[RESULTADOS.index(aposta["escolha"])]
+        resultados.append(r)
+    retornos = sum(centavos(r["retorno"]) for r in resultados)
+    saldo = sessao["saldo"] - total + retornos
+    rodada = {"numero": len(sessao["rodadas"]) + 1, "antes": sessao["saldo"], "depois": saldo,
+              "apostado": total, "retorno": retornos, "resultados": resultados}
+    return {"saldo": saldo, "rodadas": [*sessao["rodadas"], rodada], "encerrada": saldo == 0}
+
+
+def resumo_sessao(sessao):
+    resultados = [r for rodada in sessao["rodadas"] for r in rodada["resultados"]]
+    return {"saldo": sessao["saldo"], "liquido": sessao["saldo"] - SALDO_INICIAL,
+            "apostado": sum(r["apostado"] for r in sessao["rodadas"]),
+            "retorno": sum(r["retorno"] for r in sessao["rodadas"]),
+            "jogos": len(resultados), "acertos": sum(r["acertou"] for r in resultados),
+            "rodadas": len(sessao["rodadas"])}
+
+
+def comparar_sessoes(sessao, n=1000, semente=2026):
+    """Repete o roteiro já realizado, com mesmos valores/odds e limite de caixa.
+
+    Uma réplica para definitivamente se não consegue financiar a próxima rodada
+    inteira. Escolhas que na sessão original reagiram a resultados anteriores são
+    mantidas fixas aqui: comparação condicional, não previsão do comportamento.
+    """
+    if not sessao["rodadas"]:
+        raise ErroBrasileirao("Simule pelo menos uma aposta antes de comparar.")
+    if not isinstance(n, int) or not 1 <= n <= 10000:
+        raise ErroBrasileirao("Quantidade de simulações inválida.")
+    rng = np.random.default_rng(semente)
+    saldos = np.full(n, SALDO_INICIAL, dtype=np.int64)
+    ativas = np.ones(n, dtype=bool)
+    impedidas = np.zeros(n, dtype=bool)
+    for rodada in sessao["rodadas"]:
+        total = rodada["apostado"]
+        insuficientes = ativas & (saldos < total)
+        impedidas |= insuficientes
+        ativas &= ~insuficientes
+        retorno = np.zeros(n, dtype=np.int64)
+        for r in rodada["resultados"]:
+            acerto = rng.random(n) < r["prob"]
+            retorno += np.where(acerto, centavos(r["retorno_possivel"]), 0)
+        saldos[ativas] += retorno[ativas] - total
+    return {"saldos": saldos.tolist(), "n": n, "lucro": int(np.sum(saldos > SALDO_INICIAL)),
+            "prejuizo": int(np.sum((saldos > 0) & (saldos < SALDO_INICIAL))),
+            "zeradas": int(np.sum(saldos == 0)), "empate": int(np.sum(saldos == SALDO_INICIAL)),
+            "impedidas": int(impedidas.sum()), "mediana": float(np.median(saldos)),
+            "percentil_seu": float(np.mean(saldos <= sessao["saldo"]) * 100)}

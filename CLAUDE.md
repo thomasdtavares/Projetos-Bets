@@ -1,6 +1,6 @@
 # Projeto: assistente educativo sobre apostas esportivas (Projetos III, Grupo 3)
 
-Trabalho de faculdade. App em Python + Streamlit com duas abas (Chat e Simulador). Público: maiores de 18 anos que já apostam. É uma ferramenta **educativa**: nunca dá palpite, indica casa de apostas, método para ganhar mais ou para recuperar perdas, e nunca faz juízo moral.
+Trabalho de faculdade. App em Python + Streamlit com quatro abas (Conversa, Simulador, Apostas Brasileirão e Sobre). Público: maiores de 18 anos que já apostam. É uma ferramenta **educativa**: nunca dá palpite, indica casa de apostas, método para ganhar mais ou para recuperar perdas, e nunca faz juízo moral.
 
 Repositório: https://github.com/thomasdtavares/Projetos-Bets (app publicado no Streamlit Community Cloud a partir da branch `main`; o link do app está no painel share.streamlit.io da conta do GitHub do dono).
 
@@ -44,3 +44,12 @@ Pendente (responsáveis e prazos são só uma proposta, ver relatório): o grupo
 - `docs/*.docx` (documentos da disciplina) não estão no git de propósito; só existem no computador de casa do dono. O conteúdo das fichas já está em `conhecimento/base.md`.
 - O relatório foi gerado por um script que não está no repositório; para mudar algo, edite o `.docx` direto no Word.
 - Se mudar o prompt ou o modelo, rode de novo os casos de `tests/roteiro_teste_chat.md`.
+
+## Apostas Brasileirão (06/11/2026)
+
+- Preservar a aba e sua integração no `app.py` ao atualizar outras áreas. Interface em `aba_brasileirao.py`; base, caixa e Monte Carlo em `brasileirao.py`; fontes em `dados/`.
+- Decisões do usuário: saldo inicial fixo de R$ 500; jogo individual e rodada de até 10 apostas separadas; painel com escudos; curva do saldo; histograma de 1.000 réplicas em seção expansível; fim da sessão ao zerar, sem reposições. Reiniciar começa uma nova sessão.
+- Reservar o total de uma rodada antes dos retornos e rejeitar confrontos duplicados na rodada. Usar centavos inteiros. Nunca truncar o histórico usado pelos gráficos/contas.
+- A comparação usa o roteiro fixo e para cada réplica se faltar saldo para a próxima rodada inteira. Distinguir falta de saldo suficiente de saldo zero. Não alterar as probabilidades para forçar ganhos ou perdas.
+- 380 pares: 329 com odds coletadas em 23/10/2026 e 51 sem cotação. Não inventar odds ou placares; identificar a data da base. Escudos locais obtidos da CBF, com `dados/escudos/fontes.json`.
+- `pytest` valida caixa, rodadas, falta de saldo, reset, persistência entre abas e comparação. Mudanças no site precisam ser commitadas e enviadas ao `main` para aparecer no Streamlit Cloud.

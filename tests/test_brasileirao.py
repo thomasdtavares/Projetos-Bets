@@ -121,3 +121,84 @@ def test_distribuicao_do_sorteio(jogo):
     contagem = Counter(b.simular_jogo(jogo, "1", 20, rng)["resultado"] for _ in range(10000))
     for codigo, p in zip(b.RESULTADOS, b.probabilidades(jogo)):
         assert contagem[codigo] / 10000 == pytest.approx(p, abs=0.02)
+
+
+def aposta(jogo, valor=20, escolha="1"):
+    return {"jogo":jogo,"escolha":escolha,"valor":valor}
+
+
+def test_saldo_e_resumo_em_centavos(jogo):
+    inicial = b.nova_sessao()
+    s = b.executar_rodada(inicial,[aposta(jogo,35.50)],Sorteio(0))
+    assert inicial == b.nova_sessao()  # função não altera a sessão anterior
+    assert s["saldo"] == 53550
+    s = b.executar_rodada(s,[aposta(jogo,100)],Sorteio(0.99))
+    assert b.resumo_sessao(s) == {"saldo":43550,"liquido":-6450,"apostado":13550,
+                                 "retorno":7100,"jogos":2,"acertos":1,"rodadas":2}
+
+
+def test_rodada_liquida_apostas_separadas(jogo):
+    outro = {**jogo,"id":"outro"}
+    s = b.executar_rodada(b.nova_sessao(),[aposta(jogo,100),aposta(outro,50,"X")],Sorteio(0))
+    assert s["saldo"] == 55000
+    assert len(s["rodadas"]) == 1
+    assert [r["liquido"] for r in s["rodadas"][0]["resultados"]] == [100,-50]
+
+
+def test_nao_financia_rodada_com_ganhos_futuros(jogo):
+    class NaoSortear:
+        def random(self):
+            raise AssertionError("A rodada inválida não pode iniciar um sorteio")
+    s = b.nova_sessao()
+    with pytest.raises(b.ErroBrasileirao,match="saldo"):
+        b.executar_rodada(s,[aposta(jogo,300),aposta({**jogo,"id":"outro"},250)],NaoSortear())
+    assert s == b.nova_sessao()
+
+
+def test_zero_encerra_sem_reposicao(jogo):
+    s = b.executar_rodada(b.nova_sessao(),[aposta(jogo,500)],Sorteio(.999))
+    assert s["saldo"] == 0 and s["encerrada"]
+    with pytest.raises(b.ErroBrasileirao,match="terminou"):
+        b.executar_rodada(s,[aposta(jogo,.01)])
+    assert b.nova_sessao() == {"saldo":50000,"rodadas":[],"encerrada":False}
+
+
+def test_historico_completo_acima_de_vinte(jogo):
+    s = b.nova_sessao()
+    for _ in range(25):
+        s = b.executar_rodada(s,[aposta(jogo,1)],Sorteio(.99))
+    assert len(s["rodadas"]) == 25 and s["saldo"] == 47500
+    assert b.resumo_sessao(s)["apostado"] == 2500
+
+
+@pytest.mark.parametrize("caso",["vazia","duplicada","onze","sem_odds"])
+def test_rodadas_invalidas(jogo,caso):
+    apostas = [] if caso == "vazia" else [aposta(jogo)]*2 if caso == "duplicada" else [aposta({**jogo,"id":str(i)}) for i in range(11)] if caso == "onze" else [aposta({**jogo,"odd_X":None})]
+    with pytest.raises(b.ErroBrasileirao):
+        b.executar_rodada(b.nova_sessao(),apostas)
+
+
+def test_monte_carlo_valores_exatos_e_frequencias(jogo):
+    s = b.executar_rodada(b.nova_sessao(),[aposta(jogo,100)],Sorteio(0))
+    c = b.comparar_sessoes(s)
+    assert c == b.comparar_sessoes(s)
+    assert c["n"] == len(c["saldos"]) == 1000
+    assert set(c["saldos"]) == {40000,60000}
+    assert sum(c[k] for k in ("lucro","prejuizo","zeradas","empate")) == 1000
+    assert c["lucro"]/1000 == pytest.approx(6/13,abs=.04)
+    assert c["impedidas"] == 0
+
+
+def test_monte_carlo_para_sem_saldo_para_rodada_e_nao_volta(jogo):
+    s = b.nova_sessao()
+    for valor in (100,450,20):
+        s = b.executar_rodada(s,[aposta(jogo,valor)],Sorteio(0))
+    c = b.comparar_sessoes(s)
+    # Perdeu a primeira: fica em 400 e não aposta 450 nem volta na rodada de 20.
+    assert c["impedidas"] == c["saldos"].count(40000) > 0
+    assert min(c["saldos"]) >= 0
+
+
+def test_comparacao_sem_rodadas_rejeitada():
+    with pytest.raises(b.ErroBrasileirao):
+        b.comparar_sessoes(b.nova_sessao())

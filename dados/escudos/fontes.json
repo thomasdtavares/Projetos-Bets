@@ -1,0 +1,102 @@
+{
+  "Athletico-PR": {
+    "arquivo": "20052.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20052/escudo.jpg",
+    "nome_cbf": "Athletico Paranaense  - PR"
+  },
+  "Atlético-MG": {
+    "arquivo": "62194.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/62194/escudo.jpg",
+    "nome_cbf": "Atlético Mineiro  - MG"
+  },
+  "Bahia": {
+    "arquivo": "61377.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/61377/escudo.jpg",
+    "nome_cbf": "Bahia  - BA"
+  },
+  "Botafogo": {
+    "arquivo": "60175.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/60175/escudo.jpg",
+    "nome_cbf": "Botafogo  - RJ"
+  },
+  "Chapecoense": {
+    "arquivo": "20086.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20086/escudo.jpg",
+    "nome_cbf": "Chapecoense  - SC"
+  },
+  "Corinthians": {
+    "arquivo": "20001.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20001/escudo.jpg",
+    "nome_cbf": "Corinthians  - SP"
+  },
+  "Coritiba": {
+    "arquivo": "61590.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/61590/escudo.jpg",
+    "nome_cbf": "Coritiba SAF  - PR"
+  },
+  "Cruzeiro": {
+    "arquivo": "59849.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/59849/escudo.jpg",
+    "nome_cbf": "Cruzeiro  - MG"
+  },
+  "Flamengo": {
+    "arquivo": "20016.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20016/escudo.jpg",
+    "nome_cbf": "Flamengo  - RJ"
+  },
+  "Fluminense": {
+    "arquivo": "20014.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20014/escudo.jpg",
+    "nome_cbf": "Fluminense  - RJ"
+  },
+  "Grêmio": {
+    "arquivo": "20013.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20013/escudo.jpg",
+    "nome_cbf": "Grêmio  - RS"
+  },
+  "Internacional": {
+    "arquivo": "20011.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20011/escudo.jpg",
+    "nome_cbf": "Internacional  - RS"
+  },
+  "Mirassol": {
+    "arquivo": "20385.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20385/escudo.jpg",
+    "nome_cbf": "Mirassol  - SP"
+  },
+  "Palmeiras": {
+    "arquivo": "20002.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20002/escudo.jpg",
+    "nome_cbf": "Palmeiras  - SP"
+  },
+  "Bragantino": {
+    "arquivo": "20007.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20007/escudo.jpg",
+    "nome_cbf": "Red Bull Bragantino  - SP"
+  },
+  "Remo": {
+    "arquivo": "20022.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20022/escudo.jpg",
+    "nome_cbf": "Remo  - PA"
+  },
+  "Santos": {
+    "arquivo": "20008.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20008/escudo.jpg",
+    "nome_cbf": "Santos FC  - SP"
+  },
+  "São Paulo": {
+    "arquivo": "20005.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20005/escudo.jpg",
+    "nome_cbf": "São Paulo  - SP"
+  },
+  "Vasco": {
+    "arquivo": "60646.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/60646/escudo.jpg",
+    "nome_cbf": "Vasco da Gama Saf  - RJ"
+  },
+  "Vitória": {
+    "arquivo": "20018.jpg",
+    "fonte": "https://conteudo.cbf.com.br/clubes/20018/escudo.jpg",
+    "nome_cbf": "Vitória  - BA"
+  }
+}

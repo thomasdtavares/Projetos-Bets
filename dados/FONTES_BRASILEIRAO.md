@@ -28,4 +28,8 @@ O sorteio usa p(i) = (1 / odd_i) / soma(1 / odd_j). É uma hipótese proporciona
 - `data_fonte` é uma referência do fornecedor, não um calendário auditado da CBF. Há divergências entre fontes; os preços foram associados por temporada, mandante e visitante.
 - Fontes internacionais podem ter preços diferentes dos brasileiros. Não se presume disponibilidade em contas brasileiras.
 - Os 51 pares sem dados não recebem odds estimadas nem preços do confronto com mando invertido.
-- Dinheiro exclusivamente fictício, sem impostos, bônus ou comissões; sem depósitos ou pagamentos reais. O histórico da sessão guarda as últimas 20 simulações.
+- Dinheiro exclusivamente fictício, sem impostos, bônus ou comissões; sem depósitos ou pagamentos reais. O histórico guarda todas as apostas da sessão; uma nova sessão limpa o histórico e começa com R$ 500 fictícios. Não há reposições na mesma sessão.
+
+## Escudos
+
+Escudos obtidos em 06/11/2026 na [lista oficial de clubes da CBF](https://www.cbf.com.br/futebol-brasileiro/times/campeonato-brasileiro/serie-a/2026), usados para identificação das equipes. Arquivos originais preservados em `escudos/`; nomes e URLs de origem em `escudos/fontes.json`. As marcas pertencem aos respectivos clubes. A consulta visual não atualiza a coleta de odds de 23/10/2026.
