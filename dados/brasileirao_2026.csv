@@ -1,0 +1,381 @@
+﻿id;mandante;visitante;odd_1;odd_X;odd_2;tipo;casa;data_fonte;fonte;consulta
+BRA26-001;Athletico-PR;Atlético-MG;2.01;3.5;3.6;Histórica — fechamento;bet365;2026-10-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-002;Athletico-PR;Bahia;2.3;3.3;3.1;Histórica — fechamento;bet365;2026-09-20;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-003;Athletico-PR;Botafogo;1.91;3.3;3.9;Histórica — fechamento;bet365;2026-03-29;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-004;Athletico-PR;Bragantino;2.05;3.2;3.75;Histórica — fechamento;bet365;2026-08-15;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-005;Athletico-PR;Chapecoense;1.39;4.1;5.75;Histórica — fechamento;bet365;2026-04-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-006;Athletico-PR;Corinthians;2.57;3.0;2.85;Histórica — fechamento;bet365;2026-02-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-007;Athletico-PR;Coritiba;1.91;3.1;4.75;Histórica — fechamento;bet365;2026-03-22;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-008;Athletico-PR;Cruzeiro;2.1;3.2;3.6;Histórica — fechamento;bet365;2026-03-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-009;Athletico-PR;Flamengo;3.75;3.25;2.05;Histórica — fechamento;bet365;2026-05-17;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-010;Athletico-PR;Fluminense;2.32;3.1;3.25;Histórica — fechamento;bet365;2026-08-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-011;Athletico-PR;Grêmio;1.68;3.4;5.25;Histórica — fechamento;bet365;2026-05-03;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-012;Athletico-PR;Internacional;1.96;3.3;3.9;Histórica — fechamento;bet365;2026-07-25;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-013;Athletico-PR;Mirassol;1.86;3.3;4.33;Histórica — fechamento;bet365;2026-05-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-014;Athletico-PR;Palmeiras;3.2;3.4;2.2;Histórica — fechamento;bet365;2026-10-17;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-015;Athletico-PR;Remo;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-016;Athletico-PR;Santos;1.96;3.25;4.0;Histórica — fechamento;bet365;2026-02-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-017;Athletico-PR;São Paulo;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-018;Athletico-PR;Vasco;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-019;Athletico-PR;Vitória;1.57;3.75;6.0;Histórica — fechamento;bet365;2026-04-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-020;Atlético-MG;Athletico-PR;2.1;3.2;3.3;Histórica — fechamento;bet365;2026-04-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-021;Atlético-MG;Bahia;1.81;3.6;4.2;Histórica — fechamento;bet365;2026-07-21;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-022;Atlético-MG;Botafogo;2.15;3.4;3.25;Histórica — fechamento;bet365;2026-05-10;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-023;Atlético-MG;Bragantino;2.1;3.4;3.4;Histórica — fechamento;bet365;2026-10-03;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-024;Atlético-MG;Chapecoense;1.39;4.5;8.0;Histórica — fechamento;bet365;2026-09-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-025;Atlético-MG;Corinthians;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-026;Atlético-MG;Coritiba;1.62;3.75;5.25;Histórica — fechamento;bet365;2026-10-17;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-027;Atlético-MG;Cruzeiro;2.4;3.4;2.8;Pré-jogo — publicada;bet365;2026-10-29;https://oddsrun.com/match/football/br/155/11443985/brazil-serie-a/atletico-mineiro-vs-cruzeiro/;2026-10-23T16:24:10-03:00
+BRA26-028;Atlético-MG;Flamengo;4.75;3.6;1.71;Histórica — fechamento;bet365;2026-04-27;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-029;Atlético-MG;Fluminense;2.05;3.25;3.6;Histórica — fechamento;bet365;2026-09-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-030;Atlético-MG;Grêmio;1.68;3.5;5.25;Histórica — fechamento;bet365;2026-08-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-031;Atlético-MG;Internacional;2.01;3.4;3.7;Histórica — fechamento;bet365;2026-03-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-032;Atlético-MG;Mirassol;1.91;3.3;4.1;Histórica — fechamento;bet365;2026-05-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-033;Atlético-MG;Palmeiras;3.0;3.1;2.5;Histórica — fechamento;bet365;2026-01-28;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-034;Atlético-MG;Remo;1.41;4.5;7.5;Histórica — fechamento;bet365;2026-02-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-035;Atlético-MG;Santos;2.55;3.3;2.7;Histórica — fechamento;bet365;2026-10-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-036;Atlético-MG;São Paulo;2.3;3.0;3.4;Histórica — fechamento;bet365;2026-03-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-037;Atlético-MG;Vasco;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-038;Atlético-MG;Vitória;1.86;3.4;4.33;Histórica — fechamento;bet365;2026-08-29;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-039;Bahia;Athletico-PR;1.71;3.6;4.75;Histórica — fechamento;bet365;2026-04-02;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-040;Bahia;Atlético-MG;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-041;Bahia;Botafogo;1.96;3.75;3.5;Histórica — fechamento;bet365;2026-05-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-042;Bahia;Bragantino;1.66;3.7;5.25;Histórica — fechamento;bet365;2026-03-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-043;Bahia;Chapecoense;1.37;5.0;6.5;Histórica — fechamento;bet365;2026-07-17;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-044;Bahia;Corinthians;2.4;3.2;3.1;Histórica — fechamento;bet365;2026-07-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-045;Bahia;Coritiba;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-046;Bahia;Cruzeiro;1.91;3.6;3.75;Histórica — fechamento;bet365;2026-05-10;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-047;Bahia;Flamengo;4.2;3.6;1.86;Histórica — fechamento;bet365;2026-10-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-048;Bahia;Fluminense;2.01;3.3;3.6;Histórica — fechamento;bet365;2026-02-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-049;Bahia;Grêmio;1.62;4.0;4.75;Histórica — fechamento;bet365;2026-05-17;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-050;Bahia;Internacional;1.76;3.6;4.5;Histórica — fechamento;bet365;2026-08-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-051;Bahia;Mirassol;1.61;3.9;5.25;Histórica — fechamento;bet365;2026-10-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-052;Bahia;Palmeiras;2.5;3.1;2.85;Histórica — fechamento;bet365;2026-04-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-053;Bahia;Remo;1.41;4.33;6.5;Histórica — fechamento;bet365;2026-09-15;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-054;Bahia;Santos;1.57;3.9;5.25;Histórica — fechamento;bet365;2026-04-25;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-055;Bahia;São Paulo;1.91;3.4;3.8;Pré-jogo — publicada;bet365;2026-10-28;https://oddsrun.com/match/football/br/155/11451323/brazil-serie-a/ec-bahia-vs-sao-paulo/;2026-10-23T16:24:10-03:00
+BRA26-056;Bahia;Vasco;2.01;3.4;3.75;Histórica — fechamento;bet365;2026-08-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-057;Bahia;Vitória;1.66;3.6;5.25;Histórica — fechamento;bet365;2026-03-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-058;Botafogo;Athletico-PR;2.3;3.4;3.0;Histórica — fechamento;bet365;2026-08-25;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-059;Botafogo;Atlético-MG;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-060;Botafogo;Bahia;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-061;Botafogo;Bragantino;2.5;3.3;2.7;Histórica — fechamento;bet365;2026-09-13;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-062;Botafogo;Chapecoense;1.33;5.0;8.5;Histórica — fechamento;bet365;2026-10-17;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-063;Botafogo;Corinthians;2.7;3.1;2.75;Histórica — fechamento;bet365;2026-05-17;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-064;Botafogo;Coritiba;1.86;3.4;4.2;Histórica — fechamento;bet365;2026-04-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-065;Botafogo;Cruzeiro;2.3;3.0;3.4;Histórica — fechamento;bet365;2026-01-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-066;Botafogo;Flamengo;4.1;3.3;1.91;Histórica — fechamento;bet365;2026-03-14;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-067;Botafogo;Fluminense;2.25;3.1;3.4;Histórica — fechamento;bet365;2026-08-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-068;Botafogo;Grêmio;1.68;3.9;4.75;Histórica — fechamento;bet365;2026-09-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-069;Botafogo;Internacional;2.55;3.1;2.82;Histórica — fechamento;bet365;2026-04-25;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-070;Botafogo;Mirassol;2.32;3.3;3.0;Histórica — fechamento;bet365;2026-04-01;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-071;Botafogo;Palmeiras;3.25;3.5;2.1;Histórica — fechamento;bet365;2026-09-06;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-072;Botafogo;Remo;1.53;4.1;5.75;Histórica — fechamento;bet365;2026-05-02;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-073;Botafogo;Santos;2.25;3.3;3.2;Histórica — fechamento;bet365;2026-07-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-074;Botafogo;São Paulo;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-075;Botafogo;Vasco;3.0;3.6;2.2;Histórica — fechamento;bet365;2026-10-08;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-076;Botafogo;Vitória;1.71;3.6;4.75;Histórica — fechamento;bet365;2026-07-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-077;Bragantino;Athletico-PR;2.01;3.3;3.9;Histórica — fechamento;bet365;2026-02-25;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-078;Bragantino;Atlético-MG;2.01;3.2;4.0;Histórica — fechamento;bet365;2026-02-04;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-079;Bragantino;Bahia;1.81;3.75;4.0;Histórica — fechamento;bet365;2026-09-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-080;Bragantino;Botafogo;1.86;3.4;4.2;Histórica — fechamento;bet365;2026-03-21;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-081;Bragantino;Chapecoense;1.3;5.0;9.5;Pré-jogo — publicada;bet365;2026-10-28;https://oddsrun.com/match/football/br/155/11451324/brazil-serie-a/bragantino-vs-chapecoense/;2026-10-23T16:24:10-03:00
+BRA26-082;Bragantino;Corinthians;2.2;2.85;3.7;Histórica — fechamento;bet365;2026-08-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-083;Bragantino;Coritiba;1.49;4.0;6.25;Histórica — fechamento;bet365;2026-07-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-084;Bragantino;Cruzeiro;2.2;3.5;3.1;Histórica — fechamento;bet365;2026-10-13;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-085;Bragantino;Flamengo;3.8;3.2;2.05;Histórica — fechamento;bet365;2026-04-03;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-086;Bragantino;Fluminense;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-087;Bragantino;Grêmio;1.56;3.9;5.75;Histórica — fechamento;bet365;2026-08-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-088;Bragantino;Internacional;1.96;3.4;3.7;Histórica — fechamento;bet365;2026-05-31;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-089;Bragantino;Mirassol;1.66;4.1;4.2;Histórica — fechamento;bet365;2026-10-07;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-090;Bragantino;Palmeiras;2.85;3.25;2.5;Histórica — fechamento;bet365;2026-04-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-091;Bragantino;Remo;1.49;3.9;6.5;Histórica — fechamento;bet365;2026-04-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-092;Bragantino;Santos;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-093;Bragantino;São Paulo;2.35;3.1;3.2;Histórica — fechamento;bet365;2026-03-15;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-094;Bragantino;Vasco;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-095;Bragantino;Vitória;1.56;4.1;5.5;Histórica — fechamento;bet365;2026-05-17;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-096;Chapecoense;Athletico-PR;4.33;3.8;1.76;Histórica — fechamento;bet365;2026-10-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-097;Chapecoense;Atlético-MG;3.4;3.2;2.2;Histórica — fechamento;bet365;2026-04-02;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-098;Chapecoense;Bahia;3.4;3.3;2.1;Histórica — fechamento;bet365;2026-08-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-099;Chapecoense;Botafogo;3.7;3.6;1.96;Histórica — fechamento;bet365;2026-04-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-100;Chapecoense;Bragantino;4.1;3.4;1.86;Histórica — fechamento;bet365;2026-05-03;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-101;Chapecoense;Corinthians;3.4;3.1;2.25;Histórica — fechamento;bet365;2026-03-20;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-102;Chapecoense;Coritiba;2.7;3.2;2.65;Histórica — fechamento;bet365;2026-02-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-103;Chapecoense;Cruzeiro;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-104;Chapecoense;Flamengo;8.5;4.75;1.35;Histórica — fechamento;bet365;2026-07-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-105;Chapecoense;Fluminense;4.33;3.6;1.83;Pré-jogo — publicada;bet365;2026-10-24;https://oddsrun.com/match/football/br/155/11414105/brazil-serie-a/chapecoense-vs-fluminense/;2026-10-23T16:24:10-03:00
+BRA26-106;Chapecoense;Grêmio;2.85;3.4;2.3;Histórica — fechamento;bet365;2026-03-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-107;Chapecoense;Internacional;4.1;3.5;1.86;Histórica — fechamento;bet365;2026-09-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-108;Chapecoense;Mirassol;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-109;Chapecoense;Palmeiras;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-110;Chapecoense;Remo;2.55;3.25;2.65;Histórica — fechamento;bet365;2026-05-17;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-111;Chapecoense;Santos;3.0;3.1;2.5;Histórica — fechamento;bet365;2026-01-28;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-112;Chapecoense;São Paulo;4.2;3.3;1.91;Histórica — fechamento;bet365;2026-08-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-113;Chapecoense;Vasco;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-114;Chapecoense;Vitória;2.5;3.2;2.75;Histórica — fechamento;bet365;2026-04-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-115;Corinthians;Athletico-PR;2.2;3.0;3.5;Histórica — fechamento;bet365;2026-07-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-116;Corinthians;Atlético-MG;1.79;3.3;5.0;Histórica — fechamento;bet365;2026-05-24;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-117;Corinthians;Bahia;2.2;3.5;3.2;Histórica — fechamento;bet365;2026-01-28;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-118;Corinthians;Botafogo;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-119;Corinthians;Bragantino;1.86;3.2;4.75;Histórica — fechamento;bet365;2026-02-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-120;Corinthians;Chapecoense;1.42;4.5;6.5;Histórica — fechamento;bet365;2026-09-06;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-121;Corinthians;Coritiba;1.62;3.75;5.0;Histórica — fechamento;bet365;2026-03-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-122;Corinthians;Cruzeiro;1.91;3.25;4.2;Histórica — fechamento;bet365;2026-08-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-123;Corinthians;Flamengo;3.4;3.1;2.25;Histórica — fechamento;bet365;2026-03-22;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-124;Corinthians;Fluminense;2.15;3.1;3.6;Histórica — fechamento;bet365;2026-09-20;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-125;Corinthians;Grêmio;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-126;Corinthians;Internacional;2.1;3.0;3.7;Histórica — fechamento;bet365;2026-04-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-127;Corinthians;Mirassol;1.57;3.8;5.75;Pré-jogo — publicada;bet365;2026-10-30;https://oddsrun.com/match/football/br/155/11451325/brazil-serie-a/corinthians-vs-mirassol/;2026-10-23T16:24:10-03:00
+BRA26-128;Corinthians;Palmeiras;2.65;3.0;2.85;Histórica — fechamento;bet365;2026-04-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-129;Corinthians;Remo;1.49;4.1;6.5;Histórica — fechamento;bet365;2026-07-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-130;Corinthians;Santos;1.86;3.3;4.5;Histórica — fechamento;bet365;2026-08-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-131;Corinthians;São Paulo;2.01;3.1;3.9;Histórica — fechamento;bet365;2026-05-10;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-132;Corinthians;Vasco;2.2;3.2;3.3;Histórica — fechamento;bet365;2026-04-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-133;Corinthians;Vitória;1.61;3.6;6.25;Histórica — fechamento;bet365;2026-10-20;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-134;Coritiba;Athletico-PR;3.0;3.0;2.5;Histórica — fechamento;bet365;2026-09-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-135;Coritiba;Atlético-MG;2.2;3.2;3.4;Histórica — fechamento;bet365;2026-04-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-136;Coritiba;Bahia;2.5;3.25;2.75;Histórica — fechamento;bet365;2026-05-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-137;Coritiba;Botafogo;3.0;3.4;2.32;Histórica — fechamento;bet365;2026-10-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-138;Coritiba;Bragantino;2.7;2.82;2.82;Histórica — fechamento;bet365;2026-01-28;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-139;Coritiba;Chapecoense;1.62;3.6;5.75;Histórica — fechamento;bet365;2026-08-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-140;Coritiba;Corinthians;2.82;3.0;2.7;Histórica — fechamento;bet365;2026-08-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-141;Coritiba;Cruzeiro;3.25;3.1;2.25;Histórica — fechamento;bet365;2026-07-31;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-142;Coritiba;Flamengo;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-143;Coritiba;Fluminense;3.1;3.0;2.5;Histórica — fechamento;bet365;2026-04-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-144;Coritiba;Grêmio;2.17;3.4;3.2;Pré-jogo — publicada;Stake;2026-10-26;https://stake.com/pt/sports/soccer/brazil/brasileiro-serie-a;2026-10-23T16:24:10-03:00
+BRA26-145;Coritiba;Internacional;2.7;3.1;2.65;Histórica — fechamento;bet365;2026-05-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-146;Coritiba;Mirassol;2.65;3.2;2.65;Histórica — fechamento;bet365;2026-09-06;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-147;Coritiba;Palmeiras;4.2;3.2;1.96;Histórica — fechamento;bet365;2026-07-22;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-148;Coritiba;Remo;1.66;3.5;5.0;Histórica — fechamento;bet365;2026-03-15;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-149;Coritiba;Santos;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-150;Coritiba;São Paulo;2.5;3.1;3.0;Histórica — fechamento;bet365;2026-02-25;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-151;Coritiba;Vasco;2.75;3.0;2.75;Histórica — fechamento;bet365;2026-04-02;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-152;Coritiba;Vitória;2.18;3.3;2.95;Pré-jogo — publicada;Virgin Bet SA;2026-10-31;https://www.virginbet.co.za/sports/football/brazil-serie-a/SBTC3_38529/;2026-10-23T16:24:10-03:00
+BRA26-153;Cruzeiro;Athletico-PR;1.66;3.9;4.75;Histórica — fechamento;bet365;2026-09-06;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-154;Cruzeiro;Atlético-MG;1.79;3.4;4.75;Histórica — fechamento;bet365;2026-05-03;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-155;Cruzeiro;Bahia;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-156;Cruzeiro;Botafogo;1.68;3.9;4.33;Histórica — fechamento;bet365;2026-07-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-157;Cruzeiro;Bragantino;1.96;3.4;3.9;Histórica — fechamento;bet365;2026-04-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-158;Cruzeiro;Chapecoense;1.3;5.5;9.0;Histórica — fechamento;bet365;2026-05-24;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-159;Cruzeiro;Corinthians;1.66;3.5;5.5;Histórica — fechamento;bet365;2026-02-25;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-160;Cruzeiro;Coritiba;1.35;4.33;9.5;Histórica — fechamento;bet365;2026-02-06;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-161;Cruzeiro;Flamengo;3.6;3.4;2.01;Histórica — fechamento;bet365;2026-08-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-162;Cruzeiro;Fluminense;1.86;3.4;4.33;Histórica — fechamento;bet365;2026-06-01;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-163;Cruzeiro;Grêmio;1.62;3.8;5.25;Histórica — fechamento;bet365;2026-04-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-164;Cruzeiro;Internacional;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-165;Cruzeiro;Mirassol;1.61;3.8;5.25;Histórica — fechamento;bet365;2026-08-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-166;Cruzeiro;Palmeiras;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-167;Cruzeiro;Remo;1.33;5.0;8.5;Pré-jogo — publicada;bet365;2026-10-23;https://oddsrun.com/match/football/br/155/11428427/brazil-serie-a/cruzeiro-vs-remo/;2026-10-23T16:24:10-03:00
+BRA26-168;Cruzeiro;Santos;1.66;3.6;5.25;Histórica — fechamento;bet365;2026-03-22;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-169;Cruzeiro;São Paulo;1.81;3.6;4.33;Histórica — fechamento;bet365;2026-10-08;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-170;Cruzeiro;Vasco;1.91;3.4;4.2;Histórica — fechamento;bet365;2026-03-15;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-171;Cruzeiro;Vitória;1.49;4.1;6.0;Histórica — fechamento;bet365;2026-04-02;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-172;Flamengo;Athletico-PR;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-173;Flamengo;Atlético-MG;1.3;5.4;8.8;Pré-jogo — publicada;Stake;2026-10-26;https://stake.com/pt/sports/soccer/brazil/brasileiro-serie-a;2026-10-23T16:24:10-03:00
+BRA26-174;Flamengo;Bahia;1.42;4.5;6.5;Histórica — fechamento;bet365;2026-04-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-175;Flamengo;Botafogo;1.25;5.75;10.0;Histórica — fechamento;bet365;2026-08-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-176;Flamengo;Bragantino;1.27;5.25;9.0;Histórica — fechamento;bet365;2026-09-20;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-177;Flamengo;Chapecoense;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-178;Flamengo;Corinthians;1.19;5.75;13.0;Histórica — fechamento;bet365;2026-09-13;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-179;Flamengo;Coritiba;1.3;5.5;8.0;Histórica — fechamento;bet365;2026-05-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-180;Flamengo;Cruzeiro;1.45;4.2;6.5;Histórica — fechamento;bet365;2026-03-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-181;Flamengo;Fluminense;1.53;4.0;6.0;Histórica — fechamento;bet365;2026-10-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-182;Flamengo;Grêmio;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-183;Flamengo;Internacional;1.41;4.5;7.5;Histórica — fechamento;bet365;2026-02-04;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-184;Flamengo;Mirassol;1.19;6.5;11.0;Histórica — fechamento;bet365;2026-09-02;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-185;Flamengo;Palmeiras;1.71;3.4;5.0;Histórica — fechamento;bet365;2026-05-24;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-186;Flamengo;Remo;1.13;7.5;17.0;Histórica — fechamento;bet365;2026-03-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-187;Flamengo;Santos;1.3;4.75;11.0;Histórica — fechamento;bet365;2026-04-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-188;Flamengo;São Paulo;1.39;4.5;7.5;Histórica — fechamento;bet365;2026-07-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-189;Flamengo;Vasco;1.42;4.5;7.0;Histórica — fechamento;bet365;2026-05-03;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-190;Flamengo;Vitória;1.22;5.75;13.0;Histórica — fechamento;bet365;2026-08-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-191;Fluminense;Athletico-PR;1.79;3.4;4.75;Histórica — fechamento;bet365;2026-03-15;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-192;Fluminense;Atlético-MG;1.61;3.6;6.0;Histórica — fechamento;bet365;2026-03-21;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-193;Fluminense;Bahia;1.62;3.6;5.5;Histórica — fechamento;bet365;2026-07-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-194;Fluminense;Botafogo;1.76;3.3;5.5;Histórica — fechamento;bet365;2026-02-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-195;Fluminense;Bragantino;1.81;3.5;4.33;Histórica — fechamento;bet365;2026-07-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-196;Fluminense;Chapecoense;1.27;5.5;9.5;Histórica — fechamento;bet365;2026-04-27;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-197;Fluminense;Corinthians;1.81;3.3;4.75;Histórica — fechamento;bet365;2026-04-02;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-198;Fluminense;Coritiba;1.45;4.2;7.0;Histórica — fechamento;bet365;2026-10-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-199;Fluminense;Cruzeiro;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-200;Fluminense;Flamengo;3.2;3.1;2.35;Histórica — fechamento;bet365;2026-04-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-201;Fluminense;Grêmio;1.53;4.1;6.0;Histórica — fechamento;bet365;2026-01-28;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-202;Fluminense;Internacional;1.82;3.3;4.0;Pré-jogo — publicada;Virgin Bet SA;2026-10-28;https://www.virginbet.co.za/sports/football/brazil-serie-a/SBTC3_38529/;2026-10-23T16:24:10-03:00
+BRA26-203;Fluminense;Mirassol;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-204;Fluminense;Palmeiras;3.1;3.2;2.4;Histórica — fechamento;bet365;2026-08-15;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-205;Fluminense;Remo;1.46;3.8;8.0;Histórica — fechamento;bet365;2026-08-22;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-206;Fluminense;Santos;2.05;3.75;3.25;Histórica — fechamento;bet365;2026-10-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-207;Fluminense;São Paulo;1.68;3.7;4.75;Histórica — fechamento;bet365;2026-05-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-208;Fluminense;Vasco;2.32;3.1;3.25;Histórica — fechamento;bet365;2026-09-06;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-209;Fluminense;Vitória;1.51;4.33;5.75;Histórica — fechamento;bet365;2026-05-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-210;Grêmio;Athletico-PR;2.35;3.1;2.85;Pré-jogo — publicada;Virgin Bet SA;2026-10-29;https://www.virginbet.co.za/sports/football/brazil-serie-a/SBTC3_38529/;2026-10-23T16:24:10-03:00
+BRA26-211;Grêmio;Atlético-MG;2.1;3.3;3.4;Histórica — fechamento;bet365;2026-02-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-212;Grêmio;Bahia;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-213;Grêmio;Botafogo;2.3;3.0;3.4;Histórica — fechamento;bet365;2026-02-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-214;Grêmio;Bragantino;2.15;3.4;3.2;Histórica — fechamento;bet365;2026-03-13;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-215;Grêmio;Chapecoense;1.49;4.0;6.5;Histórica — fechamento;bet365;2026-08-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-216;Grêmio;Corinthians;3.0;3.2;2.4;Histórica — fechamento;bet365;2026-05-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-217;Grêmio;Coritiba;1.81;3.25;4.2;Histórica — fechamento;bet365;2026-04-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-218;Grêmio;Cruzeiro;3.3;3.6;2.05;Histórica — fechamento;bet365;2026-10-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-219;Grêmio;Flamengo;4.0;3.4;1.86;Histórica — fechamento;bet365;2026-05-10;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-220;Grêmio;Fluminense;3.7;3.25;2.05;Histórica — fechamento;bet365;2026-07-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-221;Grêmio;Internacional;2.65;3.2;2.65;Histórica — fechamento;bet365;2026-10-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-222;Grêmio;Mirassol;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-223;Grêmio;Palmeiras;4.0;3.6;1.86;Histórica — fechamento;bet365;2026-09-20;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-224;Grêmio;Remo;1.68;3.7;4.75;Histórica — fechamento;bet365;2026-04-06;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-225;Grêmio;Santos;2.15;3.2;3.5;Histórica — fechamento;bet365;2026-05-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-226;Grêmio;São Paulo;2.3;3.1;3.4;Histórica — fechamento;bet365;2026-08-08;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-227;Grêmio;Vasco;3.8;3.3;2.01;Histórica — fechamento;bet365;2026-09-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-228;Grêmio;Vitória;1.76;3.4;4.75;Histórica — fechamento;bet365;2026-03-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-229;Internacional;Athletico-PR;1.96;3.25;3.9;Histórica — fechamento;bet365;2026-01-28;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-230;Internacional;Atlético-MG;1.71;3.5;5.0;Histórica — fechamento;bet365;2026-08-22;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-231;Internacional;Bahia;1.76;3.75;4.33;Histórica — fechamento;bet365;2026-03-15;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-232;Internacional;Botafogo;2.0;3.5;3.8;Pré-jogo — publicada;bet365;2026-10-24;https://oddsrun.com/match/football/br/155/11414366/brazil-serie-a/internacional-vs-botafogo/;2026-10-23T16:24:10-03:00
+BRA26-233;Internacional;Bragantino;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-234;Internacional;Chapecoense;1.37;5.0;7.5;Histórica — fechamento;bet365;2026-03-22;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-235;Internacional;Corinthians;2.45;3.0;3.1;Histórica — fechamento;bet365;2026-10-07;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-236;Internacional;Coritiba;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-237;Internacional;Cruzeiro;2.4;3.4;2.75;Histórica — fechamento;bet365;2026-07-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-238;Internacional;Flamengo;3.4;3.4;2.05;Histórica — fechamento;bet365;2026-07-29;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-239;Internacional;Fluminense;2.15;3.2;3.5;Histórica — fechamento;bet365;2026-05-03;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-240;Internacional;Grêmio;1.71;3.6;4.75;Histórica — fechamento;bet365;2026-04-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-241;Internacional;Mirassol;1.86;3.4;4.1;Histórica — fechamento;bet365;2026-04-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-242;Internacional;Palmeiras;3.1;3.4;2.25;Histórica — fechamento;bet365;2026-02-13;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-243;Internacional;Remo;1.42;4.33;7.5;Histórica — fechamento;bet365;2026-08-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-244;Internacional;Santos;1.96;3.4;3.8;Histórica — fechamento;bet365;2026-09-06;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-245;Internacional;São Paulo;2.15;3.0;3.6;Histórica — fechamento;bet365;2026-04-01;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-246;Internacional;Vasco;1.86;3.4;4.33;Histórica — fechamento;bet365;2026-05-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-247;Internacional;Vitória;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-248;Mirassol;Athletico-PR;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-249;Mirassol;Atlético-MG;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-250;Mirassol;Bahia;2.15;3.3;3.4;Histórica — fechamento;bet365;2026-04-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-251;Mirassol;Botafogo;2.05;3.5;3.4;Histórica — fechamento;bet365;2026-09-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-252;Mirassol;Bragantino;2.1;3.3;3.6;Histórica — fechamento;bet365;2026-04-06;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-253;Mirassol;Chapecoense;1.45;4.2;7.0;Histórica — fechamento;bet365;2026-05-10;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-254;Mirassol;Corinthians;2.65;2.82;2.82;Histórica — fechamento;bet365;2026-05-04;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-255;Mirassol;Coritiba;1.57;3.6;6.25;Histórica — fechamento;bet365;2026-03-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-256;Mirassol;Cruzeiro;2.4;3.0;3.2;Histórica — fechamento;bet365;2026-02-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-257;Mirassol;Flamengo;4.5;3.5;1.79;Histórica — fechamento;bet365;2026-08-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-258;Mirassol;Fluminense;2.55;3.0;2.85;Histórica — fechamento;bet365;2026-05-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-259;Mirassol;Grêmio;1.91;3.3;3.9;Histórica — fechamento;bet365;2026-07-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-260;Mirassol;Internacional;2.01;3.5;3.5;Histórica — fechamento;bet365;2026-10-17;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-261;Mirassol;Palmeiras;3.7;3.5;2.01;Histórica — fechamento;bet365;2026-08-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-262;Mirassol;Remo;1.71;3.7;4.5;Histórica — fechamento;bet365;2026-07-29;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-263;Mirassol;Santos;1.66;3.7;4.75;Histórica — fechamento;bet365;2026-03-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-264;Mirassol;São Paulo;2.38;3.2;3.1;Pré-jogo — publicada;bet365;2026-10-24;https://oddsrun.com/match/football/br/155/11428438/brazil-serie-a/mirassol-vs-sao-paulo/;2026-10-23T16:24:10-03:00
+BRA26-265;Mirassol;Vasco;1.79;3.3;4.5;Histórica — fechamento;bet365;2026-01-29;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-266;Mirassol;Vitória;1.81;3.4;4.33;Histórica — fechamento;bet365;2026-09-13;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-267;Palmeiras;Athletico-PR;1.56;3.6;6.5;Histórica — fechamento;bet365;2026-04-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-268;Palmeiras;Atlético-MG;1.57;3.6;6.25;Histórica — fechamento;bet365;2026-07-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-269;Palmeiras;Bahia;1.53;4.2;5.75;Histórica — fechamento;bet365;2026-10-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-270;Palmeiras;Botafogo;1.51;4.0;6.25;Histórica — fechamento;bet365;2026-03-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-271;Palmeiras;Bragantino;1.53;4.1;6.25;Pré-jogo — publicada;bet365;2026-10-24;https://oddsrun.com/match/football/br/155/11434532/brazil-serie-a/palmeiras-vs-bragantino/;2026-10-23T16:24:10-03:00
+BRA26-272;Palmeiras;Chapecoense;1.37;4.75;7.0;Histórica — fechamento;bet365;2026-05-31;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-273;Palmeiras;Corinthians;1.56;3.5;7.0;Histórica — fechamento;bet365;2026-10-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-274;Palmeiras;Coritiba;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-275;Palmeiras;Cruzeiro;1.86;3.2;3.75;Histórica — fechamento;bet365;2026-05-17;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-276;Palmeiras;Flamengo;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-277;Palmeiras;Fluminense;1.62;3.9;5.0;Histórica — fechamento;bet365;2026-02-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-278;Palmeiras;Grêmio;1.51;4.33;6.0;Histórica — fechamento;bet365;2026-04-03;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-279;Palmeiras;Internacional;1.53;4.1;5.75;Histórica — fechamento;bet365;2026-08-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-280;Palmeiras;Mirassol;1.61;3.75;5.5;Histórica — fechamento;bet365;2026-03-15;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-281;Palmeiras;Remo;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-282;Palmeiras;Santos;1.56;3.75;6.0;Histórica — fechamento;bet365;2026-05-02;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-283;Palmeiras;São Paulo;1.39;4.5;8.0;Histórica — fechamento;bet365;2026-09-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-284;Palmeiras;Vasco;1.57;3.9;5.5;Histórica — fechamento;bet365;2026-08-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-285;Palmeiras;Vitória;1.3;4.75;10.0;Histórica — fechamento;bet365;2026-02-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-286;Remo;Athletico-PR;2.1;3.25;3.5;Histórica — fechamento;bet365;2026-05-24;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-287;Remo;Atlético-MG;2.7;3.1;2.7;Histórica — fechamento;bet365;2026-08-08;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-288;Remo;Bahia;3.0;3.2;2.35;Histórica — fechamento;bet365;2026-03-22;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-289;Remo;Botafogo;2.65;3.4;2.33;Pré-jogo — publicada;Virgin Bet SA;2026-10-28;https://www.virginbet.co.za/sports/football/brazil-serie-a/SBTC3_38529/;2026-10-23T16:24:10-03:00
+BRA26-290;Remo;Bragantino;3.9;3.7;1.86;Histórica — fechamento;bet365;2026-10-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-291;Remo;Chapecoense;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-292;Remo;Corinthians;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-293;Remo;Coritiba;2.05;3.3;3.75;Histórica — fechamento;bet365;2026-09-01;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-294;Remo;Cruzeiro;2.82;3.3;2.45;Histórica — fechamento;bet365;2026-04-25;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-295;Remo;Flamengo;7.0;4.5;1.41;Histórica — fechamento;bet365;2026-09-06;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-296;Remo;Fluminense;4.0;3.5;1.86;Histórica — fechamento;bet365;2026-03-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-297;Remo;Grêmio;2.01;3.3;3.8;Histórica — fechamento;bet365;2026-10-07;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-298;Remo;Internacional;3.25;3.4;2.15;Histórica — fechamento;bet365;2026-02-25;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-299;Remo;Mirassol;3.1;3.1;2.4;Histórica — fechamento;bet365;2026-02-04;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-300;Remo;Palmeiras;4.0;3.4;1.91;Histórica — fechamento;bet365;2026-05-10;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-301;Remo;Santos;3.2;3.3;2.25;Histórica — fechamento;bet365;2026-09-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-302;Remo;São Paulo;3.1;3.2;2.3;Histórica — fechamento;bet365;2026-06-01;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-303;Remo;Vasco;2.85;3.2;2.5;Histórica — fechamento;bet365;2026-04-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-304;Remo;Vitória;2.35;3.3;2.75;Histórica — fechamento;bet365;2026-07-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-305;Santos;Athletico-PR;2.05;3.2;3.7;Histórica — fechamento;bet365;2026-08-09;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-306;Santos;Atlético-MG;2.1;3.2;3.5;Histórica — fechamento;bet365;2026-04-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-307;Santos;Bahia;1.91;3.6;3.9;Pré-jogo — publicada;bet365;2026-10-24;https://oddsrun.com/match/football/br/155/11434533/brazil-serie-a/santos-vs-ec-bahia/;2026-10-23T16:24:10-03:00
+BRA26-308;Santos;Botafogo;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-309;Santos;Bragantino;2.05;3.4;3.5;Histórica — fechamento;bet365;2026-05-10;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-310;Santos;Chapecoense;1.33;4.75;8.5;Histórica — fechamento;bet365;2026-07-25;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-311;Santos;Corinthians;2.57;3.0;3.0;Histórica — fechamento;bet365;2026-03-15;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-312;Santos;Coritiba;1.53;4.0;6.25;Histórica — fechamento;bet365;2026-05-17;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-313;Santos;Cruzeiro;2.45;3.25;2.82;Histórica — fechamento;bet365;2026-09-13;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-314;Santos;Flamengo;4.33;3.9;1.71;Histórica — fechamento;bet365;2026-10-08;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-315;Santos;Fluminense;2.15;3.2;3.5;Histórica — fechamento;bet365;2026-04-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-316;Santos;Grêmio;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-317;Santos;Internacional;2.05;3.3;3.7;Histórica — fechamento;bet365;2026-03-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-318;Santos;Mirassol;1.71;3.75;4.5;Histórica — fechamento;bet365;2026-08-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-319;Santos;Palmeiras;3.0;3.25;2.35;Pré-jogo — publicada;bet365;2026-10-28;https://oddsrun.com/match/football/br/155/11451326/brazil-serie-a/santos-vs-palmeiras/;2026-10-23T16:24:10-03:00
+BRA26-320;Santos;Remo;1.61;3.7;5.75;Histórica — fechamento;bet365;2026-04-02;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-321;Santos;São Paulo;2.2;3.1;3.3;Histórica — fechamento;bet365;2026-02-04;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-322;Santos;Vasco;2.01;3.4;3.75;Histórica — fechamento;bet365;2026-02-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-323;Santos;Vitória;1.57;3.7;5.75;Histórica — fechamento;bet365;2026-05-31;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-324;São Paulo;Athletico-PR;1.96;3.2;3.9;Histórica — fechamento;bet365;2026-07-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-325;São Paulo;Atlético-MG;1.91;3.25;4.2;Histórica — fechamento;bet365;2026-09-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-326;São Paulo;Bahia;1.96;3.4;3.8;Histórica — fechamento;bet365;2026-05-03;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-327;São Paulo;Botafogo;1.71;3.8;4.5;Histórica — fechamento;bet365;2026-05-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-328;São Paulo;Bragantino;2.35;3.25;3.1;Histórica — fechamento;bet365;2026-08-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-329;São Paulo;Chapecoense;1.39;4.5;7.5;Histórica — fechamento;bet365;2026-03-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-330;São Paulo;Corinthians;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-331;São Paulo;Coritiba;1.66;3.3;6.0;Histórica — fechamento;bet365;2026-08-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-332;São Paulo;Cruzeiro;2.15;3.2;3.5;Histórica — fechamento;bet365;2026-04-04;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-333;São Paulo;Flamengo;3.7;3.0;2.2;Histórica — fechamento;bet365;2026-01-29;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-334;São Paulo;Fluminense;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-335;São Paulo;Grêmio;1.91;3.2;4.2;Histórica — fechamento;bet365;2026-02-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-336;São Paulo;Internacional;1.96;3.25;4.1;Histórica — fechamento;bet365;2026-09-20;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-337;São Paulo;Mirassol;2.05;3.4;3.6;Histórica — fechamento;bet365;2026-04-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-338;São Paulo;Palmeiras;2.57;3.0;2.85;Histórica — fechamento;bet365;2026-03-22;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-339;São Paulo;Remo;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-340;São Paulo;Santos;2.05;3.3;3.7;Histórica — fechamento;bet365;2026-10-03;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-341;São Paulo;Vasco;2.55;3.25;2.75;Histórica — fechamento;bet365;2026-10-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-342;São Paulo;Vitória;1.66;3.5;5.5;Histórica — fechamento;bet365;2026-10-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-343;Vasco;Athletico-PR;1.76;3.4;4.75;Histórica — fechamento;bet365;2026-05-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-344;Vasco;Atlético-MG;1.81;3.5;4.1;Histórica — fechamento;bet365;2026-05-31;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-345;Vasco;Bahia;2.2;3.3;3.1;Histórica — fechamento;bet365;2026-02-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-346;Vasco;Botafogo;1.91;3.4;4.0;Histórica — fechamento;bet365;2026-04-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-347;Vasco;Bragantino;2.1;3.4;3.4;Histórica — fechamento;bet365;2026-05-25;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-348;Vasco;Chapecoense;1.53;3.9;6.0;Histórica — fechamento;bet365;2026-02-05;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-349;Vasco;Corinthians;1.7;3.7;5.0;Pré-jogo — publicada;bet365;2026-10-24;https://oddsrun.com/match/football/br/155/11431548/brazil-serie-a/vasco-da-gama-vs-corinthians/;2026-10-23T16:24:10-03:00
+BRA26-350;Vasco;Coritiba;1.33;4.75;9.0;Histórica — fechamento;bet365;2026-09-20;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-351;Vasco;Cruzeiro;1.96;3.5;3.8;Histórica — fechamento;bet365;2026-08-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-352;Vasco;Flamengo;3.6;3.4;2.0;Pré-jogo — publicada;bet365;2026-10-29;https://oddsrun.com/match/football/br/155/11446470/brazil-serie-a/vasco-da-gama-vs-flamengo/;2026-10-23T16:24:10-03:00
+BRA26-353;Vasco;Fluminense;3.7;3.1;2.1;Histórica — fechamento;bet365;2026-03-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-354;Vasco;Grêmio;1.81;3.5;4.33;Histórica — fechamento;bet365;2026-03-22;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-355;Vasco;Internacional;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-356;Vasco;Mirassol;1.96;3.4;3.9;Histórica — fechamento;bet365;2026-07-26;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-357;Vasco;Palmeiras;3.1;3.25;2.4;Histórica — fechamento;bet365;2026-03-12;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-358;Vasco;Remo;1.25;5.75;11.0;Histórica — fechamento;bet365;2026-10-10;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-359;Vasco;Santos;1.86;3.5;4.0;Histórica — fechamento;bet365;2026-08-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-360;Vasco;São Paulo;2.01;3.3;3.6;Histórica — fechamento;bet365;2026-04-18;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-361;Vasco;Vitória;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-362;Vitória;Athletico-PR;2.6;3.25;2.75;Pré-jogo — publicada;bet365;2026-10-24;https://oddsrun.com/match/football/br/155/11475494/brazil-serie-a/vitoria-vs-athletico-paranaense/;2026-10-23T16:24:10-03:00
+BRA26-363;Vitória;Atlético-MG;2.32;3.1;3.25;Histórica — fechamento;bet365;2026-03-14;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-364;Vitória;Bahia;2.7;3.0;2.7;Histórica — fechamento;bet365;2026-08-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-365;Vitória;Botafogo;2.2;3.3;3.3;Histórica — fechamento;bet365;2026-08-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-366;Vitória;Bragantino;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-367;Vitória;Chapecoense;1.53;4.0;5.75;Histórica — fechamento;bet365;2026-10-08;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-368;Vitória;Corinthians;2.57;3.0;3.0;Histórica — fechamento;bet365;2026-04-19;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-369;Vitória;Coritiba;2.15;3.0;3.6;Histórica — fechamento;bet365;2026-05-02;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-370;Vitória;Cruzeiro;3.1;3.5;2.2;Histórica — fechamento;bet365;2026-09-20;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-371;Vitória;Flamengo;5.75;3.8;1.57;Histórica — fechamento;bet365;2026-02-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-372;Vitória;Fluminense;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-373;Vitória;Grêmio;2.05;3.4;3.6;Histórica — fechamento;bet365;2026-09-08;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-374;Vitória;Internacional;2.85;3.1;2.5;Histórica — fechamento;bet365;2026-05-23;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-375;Vitória;Mirassol;2.57;3.0;2.85;Histórica — fechamento;bet365;2026-03-22;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-376;Vitória;Palmeiras;4.2;3.0;1.96;Histórica — fechamento;bet365;2026-07-30;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-377;Vitória;Remo;1.79;3.4;4.75;Histórica — fechamento;bet365;2026-01-28;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-378;Vitória;Santos;;;;Não encontrado;;;;2026-10-23T16:24:10-03:00
+BRA26-379;Vitória;São Paulo;3.0;3.0;2.5;Histórica — fechamento;bet365;2026-04-11;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00
+BRA26-380;Vitória;Vasco;2.55;3.2;2.82;Histórica — fechamento;bet365;2026-07-16;https://football-data.co.uk/new/BRA.csv;2026-10-23T16:24:10-03:00

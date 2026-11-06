@@ -5,12 +5,17 @@ Projeto da disciplina Projetos III — **Grupo 3** (Bernardo Nappo, Luc Le Corre
 É uma ferramenta **educativa** para maiores de 18 anos que já apostam com alguma regularidade. Ela explica como as apostas funcionam (odds, probabilidade implícita, margem da casa, vieses, custo de oportunidade) e tem um **simulador** que mostra o que os números dizem sobre um cenário hipotético. Não dá palpites, não indica casas de apostas e não ensina a "recuperar perdas". Em sinais de risco, encaminha para CAPS/SUS e gov.br/autoexclusaoapostas.
 
 ## Como funciona
+- **Aba Apostas Brasileirão**: escolha mandante e visitante entre os 20 times de 2026, vitória/empate/derrota do mandante e um valor fictício. Um clique sorteia o resultado e mostra retorno total e lucro/prejuízo, com histórico das últimas 20 simulações da sessão. Os 380 confrontos estão listados; 329 têm odds e 51 ficam indisponíveis para simular. A base é uma coleta de 23/10/2026, com 309 triplas históricas e 20 pré-jogo, identificadas na tela; não é uma cotação ao vivo. O sorteio normaliza os três inversos das odds, sem usar o resultado real dos jogos. Funciona sem chave de API.
 - **Aba Chat**: um modelo de linguagem responde com base na base de conhecimento (`conhecimento/base.md`, as 10 fichas do Conteúdo III) e nas regras de `prompt_sistema.md`. Quando o caso pede simulação, a resposta termina com uma linha `[SIMULAR ...]`; o app a esconde, calcula um resumo em Python e oferece o botão **Abrir no simulador**.
 - **Aba Simulador** (feita para quem não tem formação em estatística, funciona sem o chat): quatro partes. **Quanto custa apostar**: 3 perguntas do dia a dia (quanto, tipo de aposta, quantas por semana, por quanto tempo) e um botão; mostra o resultado médio, o que mudou em relação ao cenário anterior, "100 pessoas fazendo a mesma coisa" e como a chance de estar no lucro cai com o tempo (conta exata, binomial). **Estratégias**: valor fixo, dobrar depois de perder, dobrar depois de ganhar, apostar alto para recuperar, parar no lucro e limite de perda, com os mesmos sorteios (Monte Carlo). **Aposte rodada a rodada**: mini-jogo com R$ 200 de mentirinha e o caixa da casa com 1.000 apostadores. **Bilhete múltiplo**: a chance e a parte da casa conforme o número de jogos. **Ler as odds de um jogo**: com as 3 odds, mostra a chance que cada uma paga e a margem da casa. A margem (5% por padrão) pode ser ajustada, a taxa de "guardar" tem fonte (poupança ou Tesouro Selic/CDB) e há uma seção sobre reapostar o que volta. A chance de acerto nunca é perguntada: sai da odd sem a margem da casa (5%).
 
 ## Estrutura
 ```
-app.py                  interface (abas Chat e Simulador)
+app.py                  interface e navegação das quatro abas
+aba_brasileirao.py       seleção, bilhete, resultado e histórico do Brasileirão
+brasileirao.py           leitura validada da base e sorteio 1X2 (sem Streamlit)
+dados/brasileirao_2026.csv  380 confrontos, odds disponíveis e origem
+dados/FONTES_BRASILEIRAO.md  procedência, cobertura e limites da coleta
 simulador.py            cálculos puros (sem Streamlit)
 llm.py                  chamada ao modelo (Gemini ou Claude)
 conhecimento/base.md    10 fichas + texto de escopo (Conteúdo III)
@@ -43,8 +48,8 @@ Cada resposta do chat tem 👍/👎. As perguntas e avaliações ficam num regis
 ```bash
 pytest
 ```
-(`tests/test_simulador.py` confere as contas; `tests/test_chat.py` confere novas tentativas, respostas prontas e registro, sem chamar o modelo.)
+(`tests/test_simulador.py` confere as contas; `tests/test_chat.py` confere novas tentativas, respostas prontas e registro, sem chamar o modelo; `tests/test_brasileirao.py` confere a base, sorteio e pagamentos; `tests/test_aba_brasileirao.py` exercita o fluxo da nova aba com Streamlit AppTest.)
 O roteiro de teste manual do chat está em `tests/roteiro_teste_chat.md`.
 
 ## Limites
-Cenários hipotéticos; apostas independentes; sem bônus, impostos ou limites de plataforma. A odd é informada pelo usuário e a chance de acerto é estimada a partir dela (1 ÷ odd ÷ (1 + margem)); o sistema não acessa odds reais.
+Cenários hipotéticos; apostas independentes; sem bônus, impostos ou limites de plataforma. Na aba Simulador, usam-se odds ilustrativas ou informadas pelo usuário. Na aba Apostas Brasileirão, usa-se uma base local de odds coletadas, sem consulta ao vivo: chance do resultado i = (1 ÷ odd i) ÷ soma dos três inversos. Isso é uma hipótese de simulação, não uma previsão. Valores ausentes não são preenchidos com estimativas. O valor fictício admite centavos, até R$ 1.000.000 por simulação; o pagamento é arredondado para centavos. O histórico é temporário e não há depósitos, pagamentos reais ou integração com operadoras.

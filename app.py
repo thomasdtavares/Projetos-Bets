@@ -1,4 +1,4 @@
-"""Assistente educativo sobre apostas esportivas — abas Conversa e Simulador."""
+"""Assistente educativo: Conversa, Simulador, Apostas Brasileirão e Sobre."""
 from pathlib import Path
 
 import numpy as np
@@ -14,6 +14,8 @@ import llm
 import registro
 import respostas_prontas
 import simulador as sim
+import brasileirao
+import aba_brasileirao
 
 # No Streamlit Cloud, um novo commit roda o app.py de novo, mas o módulo simulador já importado continua
 # na memória com a versão antiga (o que gerou AttributeError em 16/10/2026). Recarregar garante a versão atual.
@@ -21,6 +23,8 @@ sim = importlib.reload(sim)
 respostas_prontas = importlib.reload(respostas_prontas)
 registro = importlib.reload(registro)
 llm = importlib.reload(llm)
+brasileirao = importlib.reload(brasileirao)
+aba_brasileirao = importlib.reload(aba_brasileirao)
 
 RAIZ = Path(__file__).parent
 EXEMPLOS = [
@@ -43,6 +47,7 @@ DESCR_TIPO = {"Favorito": "o time mais forte vence", "Jogo equilibrado": "times 
               "Zebra": "o mais fraco vence", OUTRA: "digite a odd"}
 HORIZONTES = list(sim.HORIZONTES)
 ABA_CHAT, ABA_SIM, ABA_SOBRE = "💬 Conversa", "📊 Simulador", "ℹ️ Sobre"
+ABA_BRASILEIRAO = "Apostas Brasileirão"
 JOGO_INICIO, JOGO_APOSTA = 200.0, 10.0
 
 # Cores (paleta de referência validada: azul/vermelho como par de polaridade, cinza neutro)
@@ -204,6 +209,7 @@ for k, v in PADROES.items():
 st.session_state.setdefault("mensagens", [])
 st.session_state.setdefault("abas", ABA_CHAT)
 st.session_state.setdefault("sessao", uuid.uuid4().hex[:8])  # código aleatório, só para agrupar o registro anônimo
+aba_brasileirao.preservar_estado()
 
 
 def odd_do_tipo(tipo, outra):
@@ -1116,10 +1122,13 @@ st.markdown('<div class="aviso">🔒 <b>Aqui ninguém dá palpite</b> nem indica
             "O CAPS (SUS) atende de graça, e <b>gov.br/autoexclusaoapostas</b> bloqueia seu CPF.</div>",
             unsafe_allow_html=True)
 
-aba_chat_, aba_sim_, aba_sobre_ = st.tabs([ABA_CHAT, ABA_SIM, ABA_SOBRE], key="abas", on_change="rerun")
+aba_chat_, aba_sim_, aba_brasileirao_, aba_sobre_ = st.tabs(
+    [ABA_CHAT, ABA_SIM, ABA_BRASILEIRAO, ABA_SOBRE], key="abas", on_change="rerun")
 with aba_chat_:
     aba_chat()
 with aba_sim_:
     aba_simulador()
+with aba_brasileirao_:
+    aba_brasileirao.renderizar()
 with aba_sobre_:
     aba_sobre()
