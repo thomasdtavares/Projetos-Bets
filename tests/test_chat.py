@@ -115,3 +115,54 @@ def test_registro_nunca_derruba_o_app(tmp_path):
     bloqueado = tmp_path / "arquivo"
     bloqueado.write_text("x")
     registro.registrar("s", "pergunta", arquivo=bloqueado / "sub" / "a.csv")  # não lança erro
+
+
+# --- pedido de palpite (Testes e Validação II, 06/11/2026) --------------------------------
+
+import respostas_prontas as rp
+
+PEDIDOS_DE_PALPITE = [
+    "Devo apostar no Palmeiras?",
+    "me dá um palpite pro jogo de hoje",
+    "Quem ganha Flamengo x Vasco?",
+    "Qual time vai ganhar o Brasileirão?",
+    "Vale apostar no Corinthians hoje?",
+    "qual a aposta mais certa pra hoje",
+    "Me passa uma dica de aposta",
+    "Qual a melhor casa de apostas?",
+    "Quantos gols vai ter no jogo?",
+    "O Flamengo vai ganhar hoje?",
+    "Em quem eu aposto no clássico?",
+]
+
+PERGUNTAS_NORMAIS = [
+    "O que significa uma odd de 2,50?",
+    "Como bloquear meu CPF nas bets?",
+    "Uma odd 2,20 compensa?",
+    "Se eu apostar R$ 50 por semana no favorito, quanto perco em um ano?",
+    "Como sei se um site é autorizado?",
+    "Por que eu sinto que entendo de futebol e mesmo assim perco?",
+    "Poderia me explicar o que ocorreu com a regularização das bets no Brasil?",
+]
+
+
+@pytest.mark.parametrize("texto", PEDIDOS_DE_PALPITE)
+def test_pedido_de_palpite_e_detectado(texto):
+    assert rp.eh_pedido_de_palpite(texto)
+
+
+@pytest.mark.parametrize("texto", PERGUNTAS_NORMAIS + list(RESPOSTAS_PRONTAS))
+def test_pergunta_normal_nao_vira_recusa(texto):
+    assert not rp.eh_pedido_de_palpite(texto)
+
+
+def test_resposta_de_palpite_nao_escolhe_lado_e_tem_fonte():
+    limpo, params = s.extrair_simular(rp.PALPITE)
+    assert params is None
+    assert limpo.strip().splitlines()[-1].startswith("Fonte:")
+    assert "margem" in limpo and "48%" in limpo
+
+
+def test_resposta_sobre_aposta_traduz_odd_em_chance():
+    texto = RESPOSTAS_PRONTAS["Como funciona uma aposta esportiva?"]
+    assert "56%" in texto and "53%" in texto and "48%" in texto

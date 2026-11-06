@@ -284,3 +284,12 @@ def test_reapostar():
 def test_taxas_guardar_tem_fonte():
     for taxa, fonte in s.TAXAS_GUARDAR.values():
         assert 0 < taxa < 2 and "%" in fonte
+
+
+def test_odd_para_chance():
+    c = s.odd_para_chance(2.0)
+    assert c["paga"] == pytest.approx(0.5)
+    assert c["estimada"] == pytest.approx(0.5 / 1.05)  # cerca de 48%
+    assert round(s.odd_para_chance(1.80)["estimada"] * 100) == 53
+    with pytest.raises(s.ErroValidacao):
+        s.odd_para_chance(1.0)

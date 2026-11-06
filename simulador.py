@@ -85,6 +85,16 @@ def prob_justa(odd, margem=MARGEM_PADRAO):
     return min((1 / odd) / (1 + margem), 1.0)
 
 
+def odd_para_chance(odd, margem=MARGEM_PADRAO):
+    """Traduz a odd em chance, para mostrar ao lado dos resultados (Testes e Validação II, 06/11/2026).
+
+    Nos testes com usuários, a ligação "odd -> chance de acerto" não foi aprendida. Por isso o app passou a
+    mostrar as duas chances: a que a odd paga (1 / odd) e a estimada sem a margem da casa (prob_justa).
+    """
+    validar(odd=odd)
+    return {"paga": 1 / odd, "estimada": prob_justa(odd, margem)}
+
+
 def retorno_por_100(odd, prob):
     """Quanto volta, em média, de cada R$ 100 apostados."""
     return 100 * prob * odd

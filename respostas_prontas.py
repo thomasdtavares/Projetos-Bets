@@ -10,11 +10,13 @@ P1 = """Você escolhe um resultado dentro de um jogo (por exemplo, "o Palmeiras 
 
 Um exemplo: você aposta R$ 20 numa opção com odd 1,80. Acertando, recebe R$ 36 (R$ 20 × 1,80): desses, R$ 20 são o seu próprio dinheiro voltando e R$ 16 são lucro. Errando, recebe R$ 0.
 
+A odd também diz **qual chance a casa está dando** àquele resultado: basta dividir 1 pela odd. Odd 1,80 → 1 ÷ 1,80 ≈ 56%. Odd 2,00 → 50%. Como a margem da casa vem embutida, a chance estimada é um pouco menor: com a margem de referência de 5%, cerca de 53% na odd 1,80 e 48% na odd 2,00. Por isso odd alta não é oportunidade: ela paga mais porque acerta menos.
+
 Além do resultado do jogo, existem dezenas de outros mercados: total de gols, escanteios, cartões, quem marca primeiro. O funcionamento é sempre o mesmo; o que muda é apenas o evento que está sendo precificado.
 
 Vale um aviso sobre as **apostas múltiplas**, que juntam vários palpites num bilhete só. As odds se multiplicam e o retorno anunciado fica bem maior, mas o bilhete só paga se todos os palpites acertarem. Três palpites de odd 1,80 dão uma odd combinada de 5,83, e uma chance conjunta de cerca de 17%, não de 56%. Na aba **Simulador > Bilhete múltiplo** você pode testar isso.
 
-Fonte: Lei nº 14.790/2023 (apostas de quota fixa); regra do produto para eventos independentes (bibliografia de Probabilidade e Estatística)."""
+Fonte: Lei nº 14.790/2023 (apostas de quota fixa); relação entre odd e probabilidade e regra do produto para eventos independentes (bibliografia de Probabilidade e Estatística)."""
 
 P5 = """Não necessariamente. Acertar mais da metade só garante lucro se a odd for alta o suficiente para compensar as perdas.
 
@@ -65,6 +67,48 @@ A conta exata aparece logo abaixo, feita pelo simulador. No botão **Ver no simu
 
 Fonte: valor esperado e Lei dos Grandes Números (bibliografia de Probabilidade e Estatística); conceito de margem (overround) da base de conhecimento do projeto.
 [SIMULAR valor=20 odd=2.20 apostas=38]"""
+
+# --- Pedido de palpite (Testes e Validação II, 06/11/2026) ---------------------------------------------
+# Nos testes com usuários de 30/10, um participante relatou que o assistente "deu um palpite". Como o registro do app
+# se apaga ao reiniciar, não foi possível confirmar. A correção não depende do modelo: pedidos claros de palpite,
+# de previsão de resultado ou de indicação de casa recebem esta resposta fixa, sem chamar o modelo.
+
+PALPITE = """Palpite eu não dou: nem sobre jogo, nem sobre resultado, nem sobre casa de apostas. Não é julgamento. Esta é uma ferramenta educativa, e a decisão de apostar ou não é sua. Eu também não tenho acesso a odds em tempo real nem a nenhuma informação que "saiba" o resultado.
+
+E vale entender por que nenhum palpite resolveria a conta. A odd que a casa oferece já leva em conta o que se sabe do jogo: escalação, fase, mando de campo. A sensação de que entender de futebol dá vantagem é uma das mais comuns de quem aposta (na literatura, **ilusão de controle**), mas ela não tira a **margem da casa**, que está embutida em todas as odds. Numa odd 2,00, a casa paga como se a chance fosse 50%; tirando a margem de referência de 5%, a chance estimada é de cerca de 48%. De cada R$ 100 apostados, voltam em média cerca de R$ 95.
+
+O que eu posso fazer: explicar o que quer dizer a odd do jogo que você está olhando, ou mostrar na aba **Simulador** o que acontece com 100 pessoas que apostam assim por um tempo.
+
+Fonte: parâmetros éticos do projeto; relação entre odd e probabilidade (bibliografia de Probabilidade e Estatística)."""
+
+_PADROES_PALPITE = [
+    r"\bpalpites?\b",
+    r"\bdevo apostar\b",
+    r"\bvale (a pena )?apostar (no|na|nos|nas|em)\b",
+    r"\bquem (vai )?(ganha|ganhar|vence|vencer|leva|levar)\b",
+    r"\b(qual|que) (time|placar|resultado) (vai|deve|ganha|vence|leva)",
+    r"\b(vai|deve) (ganhar|vencer|perder|empatar) (o jogo|hoje|amanha|esse|este|de)\b",
+    r"\bquantos gols (vai|vao|sai|saem)\b",
+    r"\baposta (mais )?(certa|segura|garantida|boa pra hoje|boa para hoje)\b",
+    r"\b(me )?(da|de|manda|passa|indica) (uma |umas |alguma |algumas )?dicas?\b",
+    r"\bdicas? (de|pra|para) aposta",
+    r"\b(qual|quais) (a |e a |sao as )?(melhor|melhores) (aposta|apostas|casa|casas|bet|bets|site|sites)\b",
+    r"\bem quem (eu )?(aposto|apostar)\b",
+]
+
+
+def _normalizar(texto):
+    import unicodedata
+    t = unicodedata.normalize("NFKD", texto.lower())
+    return "".join(c for c in t if not unicodedata.combining(c))
+
+
+def eh_pedido_de_palpite(texto):
+    """True quando a mensagem pede palpite, previsão de resultado ou indicação de aposta/casa."""
+    import re
+    t = _normalizar(texto or "")
+    return any(re.search(p, t) for p in _PADROES_PALPITE)
+
 
 RESPOSTAS_PRONTAS = {
     "Como funciona uma aposta esportiva?": P1,

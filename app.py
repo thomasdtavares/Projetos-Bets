@@ -251,6 +251,11 @@ def abrir_no_simulador(p):
     s.abas = ABA_SIM
 
 
+def ir_para_simulador():
+    """Atalho da tela inicial do chat (Testes e Validação II: usuários demoraram a achar o simulador)."""
+    st.session_state.abas = ABA_SIM
+
+
 def pergunta_exemplo(texto):
     st.session_state.pendente = texto
 
@@ -429,6 +434,17 @@ def grafico_multipla(odd, escolhido, margem, maximo=8):
 
 # ------------------------------------------------------------------- Chat
 
+AJUDA_PERDA = ("É uma média: quanto, em média, quem aposta assim termina com a menos no período. "
+               "Não é garantia: cada pessoa pode perder mais, perder menos ou até ganhar.")
+
+
+def frase_odd(odd, margem=sim.MARGEM_PADRAO):
+    """Odd -> chance, em uma linha (Testes e Validação II, 06/11/2026)."""
+    c = sim.odd_para_chance(odd, margem)
+    return (f"Odd {num(odd)} → a casa paga como se a chance fosse {pc(c['paga'], 0)} (1 ÷ {num(odd)}). "
+            f"Tirando a margem da casa, a chance estimada de acertar é de cerca de {pc(c['estimada'], 0)}.")
+
+
 def resumo_chat(p, chave):
     """Resumo calculado em Python (nunca pelo modelo) + botão para abrir o simulador."""
     valor = p.get("valor") or (p["pct"] * p["banca"] if "pct" in p and "banca" in p else None)
@@ -447,8 +463,10 @@ def resumo_chat(p, chave):
                 c = st.columns(4)
                 c[0].metric("De cada R$ 100, voltam", brl(r["retorno_por_100"]))
                 c[1].metric("Total apostado", brl(r["total_apostado"]))
-                c[2].metric("Perda média", brl(-r["perda_esperada"]))
+                c[2].metric("Perda média", brl(-r["perda_esperada"]), help=AJUDA_PERDA)
                 c[3].metric("De 100 pessoas, perdem", f"{sim.pessoas_em_100(d)['perderam']}")
+                st.caption(frase_odd(p["odd"], p.get("margem", sim.MARGEM_PADRAO))
+                           + " Perda média é uma média, não uma garantia.")
         else:
             st.caption("Ainda faltam dados para a conta (valor, odd e número de apostas). "
                        "Você pode completá-los direto no simulador.")
@@ -496,6 +514,10 @@ def aba_chat():
         if pronta:
             s.mensagens.append(nova_resposta(pronta, "pronta"))
             registro.registrar(s.sessao, "pergunta", pergunta, "pronta")
+        elif respostas_prontas.eh_pedido_de_palpite(pergunta):
+            # Pedido de palpite nunca chega ao modelo (Testes e Validação II, 06/11/2026)
+            s.mensagens.append(nova_resposta(respostas_prontas.PALPITE, "pronta"))
+            registro.registrar(s.sessao, "pergunta", pergunta, "palpite_recusado")
         elif llm.provedor() is None:
             s.mensagens.append({"role": "assistant", "content": "", "erro": True, "detalhe": "SemChave",
                                 "id": uuid.uuid4().hex[:10]})
@@ -517,6 +539,8 @@ def aba_chat():
             for i, ex in enumerate(EXEMPLOS):
                 c[i % 2].button(ROTULOS.get(ex, ex).replace("$", "\\$"), key=f"ex{i}", on_click=pergunta_exemplo,
                                 args=(ex,), width="stretch", help=ex.replace("$", "\\$"))
+            st.button("Prefere ir direto aos números? Abrir o simulador →", on_click=ir_para_simulador,
+                      type="tertiary", icon=":material/calculate:")
 
     ultimo = len(s.mensagens) - 1
     for i, m in enumerate(s.mensagens):
@@ -654,7 +678,10 @@ def bloco_quanto_custa():
         f'e, em média, termina com <span class="neg">{brl_html(-d["resultado_medio"], 0)} a menos</span>.</div>'
         f'<div class="peq">São {r["n"]} apostas de {brl_html(c["valor"])}. De cada {brl_html(100, 0)} apostados, '
         f'voltam em média {brl_html(volta)}; o resto fica com a casa. Isso vale para qualquer tipo de aposta: '
-        "a casa cobra a parte dela em todas.</div></div>", unsafe_allow_html=True)
+        "a casa cobra a parte dela em todas.</div>"
+        f'<div class="peq">🎯 {frase_odd(c["odd"], margem_de(c))}</div>'
+        '<div class="peq">⚽ Entender de futebol não muda essa conta: a odd já embute o que se sabe do jogo, '
+        "e a margem é cobrada de todo mundo, acertando ou errando.</div></div>", unsafe_allow_html=True)
     st.plotly_chart(grafico_para_onde_vai(volta), width="stretch", config=SEM_BARRA)
 
     ant_r = None
@@ -673,12 +700,25 @@ def bloco_quanto_custa():
     m[0].metric("Total apostado", brl(d["total_apostado"], 0),
                 delta=delta(d["total_apostado"] - ant_r["d"]["total_apostado"]) if ant_r else None,
                 delta_color="off")
-    m[1].metric("Perda média", brl(-d["resultado_medio"], 0),
+    m[1].metric("Perda média", brl(-d["resultado_medio"], 0), help=AJUDA_PERDA,
                 delta=delta(ant_r["d"]["resultado_medio"] - d["resultado_medio"]) if ant_r else None,
                 delta_color="inverse")
     m[2].metric("De 100 pessoas, perdem", f"{g['perderam']}",
                 delta=delta(g["perderam"] - ant_r["g"]["perderam"], moeda=False) if ant_r else None,
                 delta_color="inverse")
+
+    # --- guardar --------------------------------------------------------------------------
+    secao("Apostar × guardar: e se esse dinheiro fosse guardado?",
+          "O mesmo valor, toda semana, numa aplicação simples. É só uma comparação, não uma recomendação de investimento.")
+    st.segmented_control("Guardar onde?", list(sim.TAXAS_GUARDAR), key="q_taxa")
+    taxa, fonte = sim.TAXAS_GUARDAR[s.q_taxa or PADROES["q_taxa"]]
+    co = calcular(c, taxa)["co"]
+    st.caption(f"Taxa usada: {fonte}. Valores consultados em 16/10/2026.")
+    k = st.columns(3)
+    k[0].metric("Guardando", brl(co["total_acumulado"], 0))
+    k[1].metric("Apostando (o que volta, em média)", brl(co["total_apostando"], 0))
+    k[2].metric("Diferença", brl(co["diferenca"], 0))
+    st.plotly_chart(grafico_oportunidade(co), width="stretch", config=SEM_BARRA)
 
     # --- 100 pessoas --------------------------------------------------------------------
     secao("Se 100 pessoas fizessem exatamente isso",
@@ -691,28 +731,15 @@ def bloco_quanto_custa():
         frase += f". As {g['ganharam']} que ganham levam em média {brl_md(d['ganho_medio'], 0)}"
     st.markdown(frase + ". Quem ganha costuma contar para os outros; quem perde, quase nunca.")
 
-    # --- tempo ----------------------------------------------------------------------------
-    secao("Quanto mais tempo apostando, menos gente fica no lucro",
-          "No começo, a sorte pesa mais e muita gente está ganhando. Com o tempo, a parte da casa vai somando.")
-    linhas = rodar_tempo(c["valor"], c["odd"], r["prob"], c["por_semana"])
-    st.plotly_chart(grafico_tempo(linhas, r["semanas"] * 12 / 52), width="stretch", config=SEM_BARRA)
-    if linhas:
-        st.caption(f"Depois de 1 mês: cerca de {linhas[0]['tendencia'] * 100:.0f} em 100 estão no lucro. "
-                   f"Depois de {linhas[-1]['mes'] // 12} anos: cerca de {linhas[-1]['tendencia'] * 100:.0f} em 100, "
-                   f"e a perda média chega a {brl_md(-linhas[-1]['resultado_medio'], 0)}.")
-
-    # --- guardar --------------------------------------------------------------------------
-    secao("E se esse dinheiro fosse guardado?",
-          "O mesmo valor, toda semana, numa aplicação simples. É só uma comparação, não uma recomendação de investimento.")
-    st.segmented_control("Guardar onde?", list(sim.TAXAS_GUARDAR), key="q_taxa")
-    taxa, fonte = sim.TAXAS_GUARDAR[s.q_taxa or PADROES["q_taxa"]]
-    co = calcular(c, taxa)["co"]
-    st.caption(f"Taxa usada: {fonte}. Valores consultados em 16/10/2026.")
-    k = st.columns(3)
-    k[0].metric("Guardando", brl(co["total_acumulado"], 0))
-    k[1].metric("Apostando (o que volta, em média)", brl(co["total_apostando"], 0))
-    k[2].metric("Diferença", brl(co["diferenca"], 0))
-    st.plotly_chart(grafico_oportunidade(co), width="stretch", config=SEM_BARRA)
+    # --- tempo (recolhido: usuários acharam o simulador carregado, T&V II) ---------------------
+    with st.expander("⏳ E com o passar do tempo? Quanto mais tempo apostando, menos gente fica no lucro"):
+        st.caption("No começo, a sorte pesa mais e muita gente está ganhando. Com o tempo, a parte da casa vai somando.")
+        linhas = rodar_tempo(c["valor"], c["odd"], r["prob"], c["por_semana"])
+        st.plotly_chart(grafico_tempo(linhas, r["semanas"] * 12 / 52), width="stretch", config=SEM_BARRA)
+        if linhas:
+            st.caption(f"Depois de 1 mês: cerca de {linhas[0]['tendencia'] * 100:.0f} em 100 estão no lucro. "
+                       f"Depois de {linhas[-1]['mes'] // 12} anos: cerca de {linhas[-1]['tendencia'] * 100:.0f} em 100, "
+                       f"e a perda média chega a {brl_md(-linhas[-1]['resultado_medio'], 0)}.")
 
     # --- reapostar --------------------------------------------------------------------------
     with st.expander("🔁 E se você reaposta o que ganha?"):
