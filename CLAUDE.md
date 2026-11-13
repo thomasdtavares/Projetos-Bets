@@ -11,7 +11,7 @@ Repositório: https://github.com/thomasdtavares/Projetos-Bets (app publicado no 
 - `respostas_prontas.py`: respostas fixas (tiradas das fichas) para as 4 perguntas sugeridas; não chamam o modelo.
 - `registro.py`: registro anônimo (pergunta, tipo de resposta, 👍/👎) em `registros/interacoes.csv` (fora do git; some quando o app reinicia). Download na aba Sobre > Área da equipe, se o secret `EQUIPE_SENHA` existir.
 - `prompt_sistema.md`: regras do assistente + formato da linha `[SIMULAR valor=.. odd=.. prob=.. apostas=.. taxa=.. banca=.. pct=.. modo=..]`.
-- `conhecimento/base.md`: as 10 fichas e o texto de escopo do Conteúdo III (extraídos sem reescrever). É carregada inteira no prompt (sem RAG).
+- `conhecimento/base.md`: fichas P1 a P10 e texto de escopo do Conteúdo III; desde 13/11/2026, também os verbetes P11 a P26 (resposta curta + "Quer entender melhor?") e as respostas-limite F1 a F5 do Conteúdo IV (extraídos sem reescrever, com as correções listadas no cabeçalho do arquivo). É carregada inteira no prompt (sem RAG). `tests/test_base.py` confere estrutura, coerência com o prompt e os números dos verbetes.
 - `tests/test_simulador.py` (44 testes) e `tests/test_chat.py` (11 testes, sem chamar modelo), `tests/roteiro_teste_chat.md`, `tests/saida_teste_chat.md` (respostas reais do Gemini aos 13 casos do roteiro).
 - `Implementacao_I_preenchido.docx`: relatório da entrega, com capturas em `docs/evidencias/`.
 
@@ -61,3 +61,4 @@ Pendente (responsáveis e prazos são só uma proposta, ver relatório): o grupo
 - Taxas de "guardar" reconfirmadas em 13/11/2026: Selic 13,75% a.a. mantida pelo Copom em 04/11/2026 (reunião 282); valores do simulador não mudaram, só a fonte e as datas.
 - Aba Sobre: cita o Brasileirão e seus limites; datas atualizadas (app em 13/11/2026).
 - Produto congelado após este commit para a gravação do vídeo e a banca (27/11): não publicar mudanças sem combinar com o grupo.
+- **Base do Conteúdo IV (13/11/2026):** a base passou a ter as fichas P1 a P26 e as respostas-limite F1 a F5, fechando a lacuna apontada no feedback do Conteúdo III e no Workbook (ilusão de controle, excesso de confiança, Kelly, bônus, disponibilidade, viés do presente, TCL, binomial). O prompt cita P1 a P26, usa F1 a F5 como modelo para pedidos de palpite, estratégia, comparação de casas e vulnerabilidade, e só usa a parte "Quer entender melhor?" quando a pessoa pede detalhes. A aba Sobre deduplica as fontes por primeiro sobrenome + ano (`chave_da_fonte`). Roteiro do chat ampliado (seção B3 de `tests/roteiro_teste_chat.md`).

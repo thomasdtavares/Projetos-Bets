@@ -1034,6 +1034,15 @@ def aba_simulador():
 
 # ----------------------------------------------------------------------- Sobre
 
+def chave_da_fonte(linha):
+    """Mesma obra citada de jeitos diferentes nas fichas = mesma chave (1º sobrenome + anos). 13/11/2026."""
+    titulo = linha.split(" — ")[0]
+    anos = re.findall(r"\b(?:19|20)\d{2}\b", titulo)
+    if not anos:
+        return re.sub(r"[^a-z0-9]", "", titulo.lower())
+    return re.sub(r"[^a-z]", "", titulo.split()[0].lower()) + "".join(anos)
+
+
 @st.cache_data
 def fontes_da_base():
     """Fontes citadas nas fichas (conhecimento/base.md), sem repetir e sem 'elaboração própria'."""
@@ -1042,7 +1051,7 @@ def fontes_da_base():
     for bloco in re.findall(r"\*\*Fontes:\*\*(.*?)(?=\n## |\Z)", base, re.S):
         for linha in re.findall(r"^- (.+)$", bloco, re.M):
             linha = linha.strip()
-            chave = linha.split(" — ")[0]
+            chave = chave_da_fonte(linha)
             if "elaboração própria" not in linha and chave not in chaves:
                 chaves.add(chave)
                 vistas.append(linha)
@@ -1078,7 +1087,7 @@ def aba_sobre():
         "- O simulador usa cenários hipotéticos e hipóteses simplificadas (veja *Como fizemos as contas* na aba Simulador).\n"
         "- A aba Brasileirão usa odds coletadas em 23/10/2026, sem atualização ao vivo, e dinheiro fictício. "
         "As chances do sorteio saem das próprias odds: é uma hipótese, não uma previsão dos jogos.\n"
-        "- Datas: base de conhecimento de 11/09/2026; taxas de \"guardar\" consultadas em 16/10/2026 e "
+        "- Datas: base de conhecimento com as fichas de 11/09/2026 e os verbetes revisados de 18/09/2026; taxas de \"guardar\" consultadas em 16/10/2026 e "
         "reconfirmadas em 13/11/2026; última atualização do app em 13/11/2026.")
     st.markdown("**Privacidade**")
     st.markdown("Para melhorar a ferramenta, registramos de forma **anônima** as perguntas feitas e as avaliações 👍/👎. "
