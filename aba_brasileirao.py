@@ -224,6 +224,12 @@ def construtor(jogos):
                 b = bra.calcular_bilhete(jogo,escolha,valor)
                 st.markdown(f"Se acertar: **{dinheiro_md(b['retorno_possivel'])}** de retorno, com **{dinheiro_md(b['lucro_possivel'])}** de lucro. "
                             f"Se errar: **{dinheiro_md(valor)}** de prejuízo.")
+                media = bra.retorno_medio(jogo)
+                st.info(f"**Na média:** de cada {dinheiro_md(100)} colocados neste jogo, voltam "
+                        f"**{dinheiro_md(media['retorno_medio'])}**, seja qual for o resultado escolhido. "
+                        f"Os {dinheiro_md(media['perda_media'])} restantes ficam com a casa: é a margem embutida nas odds "
+                        f"(as três chances somam {numero(media['soma_chances']*100)}%, e não 100%).",
+                        icon=":material/percent:")
                 bra.preparar_rodada([*s.bra_fila,aposta] if rodada else [aposta],sessao["saldo"])
             except bra.ErroBrasileirao as exc:
                 erro = str(exc)
@@ -290,6 +296,10 @@ def renderizar():
     with st.expander("Como funciona · odds, sorteios e fontes"):
         st.write("Vitória, empate e derrota são sorteados com chances proporcionais a 1 ÷ odd, normalizadas para somarem 100%. "
                  "Isso é uma hipótese para a simulação, não uma previsão. Não geramos placares nem usamos o resultado real dos jogos históricos.")
+        st.write("Por que, na média, sempre se perde: somando 1 ÷ odd dos três resultados, os jogos desta base dão entre "
+                 "104,7% e 113,7% (média de 106,9%). O que passa de 100% é a margem da casa. Com as chances do sorteio, "
+                 "cada R\\$ 100 colocados devolvem em média R\\$ 100 ÷ essa soma, qualquer que seja o resultado escolhido. "
+                 "Acertar alguns jogos é comum; ficar no lucro depois de muitas apostas é cada vez menos provável.")
         st.write("Cada rodada precisa caber no saldo antes de receber retornos. Ao zerar, a sessão termina. "
                  "Não há reposições de dinheiro. Os R$ 500 voltam somente ao começar uma nova sessão.")
         st.caption("Base: 309 confrontos históricos, 20 com odds pré-jogo registradas e 51 sem cotação. "

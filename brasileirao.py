@@ -66,6 +66,18 @@ def probabilidades(jogo):
     return tuple(p / total for p in inversas)
 
 
+def retorno_medio(jogo, valor=100):
+    """Quanto volta, em média, de `valor` colocado em qualquer resultado do jogo (13/11/2026).
+
+    Com p_i = (1/odd_i) / S, onde S = soma dos inversos das odds, o retorno esperado de cada
+    resultado é odd_i * p_i * valor = valor / S: igual para vitória, empate e derrota.
+    A diferença valor - valor / S é a parte que fica com a casa, em média (margem embutida nas odds).
+    """
+    soma = sum(1 / odd for odd in odds_do_jogo(jogo))
+    medio = valor / soma
+    return {"retorno_medio": medio, "perda_media": valor - medio, "soma_chances": soma}
+
+
 def valor_em_centavos(valor):
     try:
         quantia = Decimal(str(valor))

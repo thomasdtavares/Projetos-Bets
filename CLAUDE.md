@@ -1,6 +1,6 @@
 # Projeto: assistente educativo sobre apostas esportivas (Projetos III, Grupo 3)
 
-Trabalho de faculdade. App em Python + Streamlit com quatro abas (Conversa, Simulador, Apostas Brasileirão e Sobre). Público: maiores de 18 anos que já apostam. É uma ferramenta **educativa**: nunca dá palpite, indica casa de apostas, método para ganhar mais ou para recuperar perdas, e nunca faz juízo moral.
+Trabalho de faculdade. App em Python + Streamlit com quatro abas (Conversa, Simulador, Brasileirão (simulação) e Sobre). Público: maiores de 18 anos que já apostam. É uma ferramenta **educativa**: nunca dá palpite, indica casa de apostas, método para ganhar mais ou para recuperar perdas, e nunca faz juízo moral.
 
 Repositório: https://github.com/thomasdtavares/Projetos-Bets (app publicado no Streamlit Community Cloud a partir da branch `main`; o link do app está no painel share.streamlit.io da conta do GitHub do dono).
 
@@ -53,3 +53,11 @@ Pendente (responsáveis e prazos são só uma proposta, ver relatório): o grupo
 - A comparação usa o roteiro fixo e para cada réplica se faltar saldo para a próxima rodada inteira. Distinguir falta de saldo suficiente de saldo zero. Não alterar as probabilidades para forçar ganhos ou perdas.
 - 380 pares: 329 com odds coletadas em 23/10/2026 e 51 sem cotação. Não inventar odds ou placares; identificar a data da base. Escudos locais obtidos da CBF, com `dados/escudos/fontes.json`.
 - `pytest` valida caixa, rodadas, falta de saldo, reset, persistência entre abas e comparação. Mudanças no site precisam ser commitadas e enviadas ao `main` para aparecer no Streamlit Cloud.
+
+## Entrega final (13/11/2026)
+
+- Aba renomeada para "🏟️ Brasileirão (simulação)" (`ABA_BRASILEIRAO`), para não parecer uma casa de apostas no vídeo e na banca. Os testes da aba usam o novo nome.
+- Linha "Na média" no bilhete do Brasileirão (`brasileirao.retorno_medio`): com p_i = (1/odd_i)/S, o retorno esperado de qualquer resultado é valor/S. Na base, S vai de 104,7% a 113,7% (média 106,9%). Explicação também no expander "Como funciona".
+- Taxas de "guardar" reconfirmadas em 13/11/2026: Selic 13,75% a.a. mantida pelo Copom em 04/11/2026 (reunião 282); valores do simulador não mudaram, só a fonte e as datas.
+- Aba Sobre: cita o Brasileirão e seus limites; datas atualizadas (app em 13/11/2026).
+- Produto congelado após este commit para a gravação do vídeo e a banca (27/11): não publicar mudanças sem combinar com o grupo.

@@ -361,12 +361,12 @@ TIPOS_ODD = {"Favorito": 1.50, "Jogo equilibrado": 2.20, "Zebra": 5.00}
 HORIZONTES = {"1 mês": 4, "3 meses": 13, "6 meses": 26, "1 Brasileirão": 38,
               "1 ano": 52, "2 anos": 104, "5 anos": 260}
 APOSTAS_POR_SEMANA = (1, 2, 3, 5, 10)
-# Rendimento de "guardar" (% ao mês, bruto). Referências consultadas em 16/10/2026:
+# Rendimento de "guardar" (% ao mês, bruto). Referências consultadas em 16/10/2026 e reconfirmadas em 13/11/2026:
 # - Poupança: 0,6698% para depósitos com aniversário em 1º/10/2026 (taxas divulgadas pelo Banco Central).
-# - Tesouro Selic / CDB 100% do CDI: Selic de 13,75% ao ano (Copom, 16/09/2026) -> (1,1375)^(1/12) - 1 = 1,08% ao mês.
+# - Tesouro Selic / CDB 100% do CDI: Selic de 13,75% ao ano (Copom, 16/09/2026; mantida em 04/11/2026) -> (1,1375)^(1/12) - 1 = 1,08% ao mês.
 TAXAS_GUARDAR = {
     "Poupança": (0.67, "0,67% ao mês: rendimento da poupança em outubro de 2026 (Banco Central)"),
-    "Tesouro Selic ou CDB 100% do CDI": (1.08, "1,08% ao mês: equivale à Selic de 13,75% ao ano (Copom, 16/09/2026), antes do imposto de renda"),
+    "Tesouro Selic ou CDB 100% do CDI": (1.08, "1,08% ao mês: equivale à Selic de 13,75% ao ano (definida pelo Copom em 16/09/2026 e mantida em 04/11/2026), antes do imposto de renda"),
 }
 TAXA_GUARDAR = TAXAS_GUARDAR["Poupança"][0]
 MARGEM_MIN, MARGEM_MAX = 0.03, 0.12

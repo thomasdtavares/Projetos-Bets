@@ -108,13 +108,13 @@ def test_saldo_zero_resumo_e_nova_sessao(monkeypatch):
 def test_app_preserva_estado_e_melhorias_do_chat():
     at = AppTest.from_file(str(Path(__file__).resolve().parents[1]/"app.py"),default_timeout=60).run()
     assert not at.exception
-    assert "Apostas Brasileirão" in [t.label for t in at.tabs]
-    at.session_state["abas"] = "Apostas Brasileirão"
+    assert "🏟️ Brasileirão (simulação)" in [t.label for t in at.tabs]
+    at.session_state["abas"] = "🏟️ Brasileirão (simulação)"
     at.run()
     at.button(key="bra_simular").click().run()
     s = at.session_state["bra_sessao"]
     at.session_state["abas"] = "ℹ️ Sobre"
     at.run()
-    at.session_state["abas"] = "Apostas Brasileirão"
+    at.session_state["abas"] = "🏟️ Brasileirão (simulação)"
     at.run()
     assert not at.exception and at.session_state["bra_sessao"] == s

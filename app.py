@@ -1,4 +1,4 @@
-"""Assistente educativo: Conversa, Simulador, Apostas Brasileirão e Sobre."""
+"""Assistente educativo: Conversa, Simulador, Brasileirão (simulação) e Sobre."""
 from pathlib import Path
 
 import numpy as np
@@ -47,7 +47,7 @@ DESCR_TIPO = {"Favorito": "o time mais forte vence", "Jogo equilibrado": "times 
               "Zebra": "o mais fraco vence", OUTRA: "digite a odd"}
 HORIZONTES = list(sim.HORIZONTES)
 ABA_CHAT, ABA_SIM, ABA_SOBRE = "💬 Conversa", "📊 Simulador", "ℹ️ Sobre"
-ABA_BRASILEIRAO = "Apostas Brasileirão"
+ABA_BRASILEIRAO = "🏟️ Brasileirão (simulação)"
 JOGO_INICIO, JOGO_APOSTA = 200.0, 10.0
 
 # Cores (paleta de referência validada: azul/vermelho como par de polaridade, cinza neutro)
@@ -719,7 +719,7 @@ def bloco_quanto_custa():
     st.segmented_control("Guardar onde?", list(sim.TAXAS_GUARDAR), key="q_taxa")
     taxa, fonte = sim.TAXAS_GUARDAR[s.q_taxa or PADROES["q_taxa"]]
     co = calcular(c, taxa)["co"]
-    st.caption(f"Taxa usada: {fonte}. Valores consultados em 16/10/2026.")
+    st.caption(f"Taxa usada: {fonte}. Valores consultados em 16/10/2026 e reconfirmados em 13/11/2026.")
     k = st.columns(3)
     k[0].metric("Guardando", brl(co["total_acumulado"], 0))
     k[1].metric("Apostando (o que volta, em média)", brl(co["total_apostando"], 0))
@@ -1027,7 +1027,7 @@ def aba_simulador():
             "- Cada aposta é **independente** das outras; não entram bônus, promoções, impostos nem limites das plataformas.\n"
             "- Fora da seção \"reapostar\", supomos que o dinheiro que volta **não é reapostado**. Na seção, a conta é a "
             "da média: total apostado = colocado ÷ (1 − fração reapostada × retorno por real).\n"
-            f"- **Guardar** (valores consultados em 16/10/2026): poupança, {poup[1]}; Tesouro Selic ou CDB, {selic[1]}. "
+            f"- **Guardar** (valores consultados em 16/10/2026 e reconfirmados em 13/11/2026): poupança, {poup[1]}; Tesouro Selic ou CDB, {selic[1]}. "
             "Não é recomendação de investimento.\n"
             "- Tipos de aposta (odds 1,50 / 2,20 / 5,00) são ilustrativos, sem relação com jogos reais.")
 
@@ -1061,6 +1061,8 @@ def aba_sobre():
         st.markdown("**O que a ferramenta faz**")
         st.markdown("- explica como funcionam odds, margem da casa e apostas múltiplas;\n"
                     "- mostra, com contas, quanto apostar pode custar ao longo do tempo;\n"
+                    "- deixa você testar apostas fictícias em jogos do Brasileirão 2026 e comparar o seu "
+                    "resultado com 1.000 simulações do mesmo roteiro;\n"
                     "- explica vieses comuns, como a falácia do jogador e a perseguição de perdas;\n"
                     "- indica onde buscar apoio e informação oficial.")
     with c2:
@@ -1074,8 +1076,10 @@ def aba_sobre():
         "- As respostas da conversa são escritas por um modelo de linguagem a partir da nossa base de conhecimento e "
         "podem conter erros. Os números do simulador são calculados pelo código, não pelo modelo.\n"
         "- O simulador usa cenários hipotéticos e hipóteses simplificadas (veja *Como fizemos as contas* na aba Simulador).\n"
-        "- Datas: base de conhecimento de 11/09/2026; taxas de \"guardar\" consultadas em 16/10/2026; "
-        "última atualização do app em 23/10/2026.")
+        "- A aba Brasileirão usa odds coletadas em 23/10/2026, sem atualização ao vivo, e dinheiro fictício. "
+        "As chances do sorteio saem das próprias odds: é uma hipótese, não uma previsão dos jogos.\n"
+        "- Datas: base de conhecimento de 11/09/2026; taxas de \"guardar\" consultadas em 16/10/2026 e "
+        "reconfirmadas em 13/11/2026; última atualização do app em 13/11/2026.")
     st.markdown("**Privacidade**")
     st.markdown("Para melhorar a ferramenta, registramos de forma **anônima** as perguntas feitas e as avaliações 👍/👎. "
                 "Não registramos nome, e-mail, endereço IP nem nada que identifique você. Não escreva dados pessoais "

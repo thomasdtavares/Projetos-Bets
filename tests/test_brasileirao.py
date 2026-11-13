@@ -202,3 +202,20 @@ def test_monte_carlo_para_sem_saldo_para_rodada_e_nao_volta(jogo):
 def test_comparacao_sem_rodadas_rejeitada():
     with pytest.raises(b.ErroBrasileirao):
         b.comparar_sessoes(b.nova_sessao())
+
+
+def test_retorno_medio_igual_para_os_tres_resultados(jogo):
+    """13/11/2026: a linha "Na média" da aba vale para qualquer escolha (odds 2, 3 e 4)."""
+    m = b.retorno_medio(jogo)
+    soma = 1 / 2 + 1 / 3 + 1 / 4
+    assert m["soma_chances"] == pytest.approx(soma)
+    assert m["retorno_medio"] == pytest.approx(100 / soma)
+    assert m["perda_media"] == pytest.approx(100 - 100 / soma)
+    for odd, p in zip(b.odds_do_jogo(jogo), b.probabilidades(jogo)):
+        assert odd * p * 100 == pytest.approx(m["retorno_medio"])
+
+
+def test_toda_a_base_tem_margem_positiva():
+    for j in b.carregar_jogos():
+        if j["odd_1"] is not None:
+            assert b.retorno_medio(j)["perda_media"] > 0
